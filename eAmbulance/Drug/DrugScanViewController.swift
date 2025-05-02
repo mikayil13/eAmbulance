@@ -180,7 +180,7 @@ final class DrugScanViewController: UIViewController {
             textContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             textContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             textContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            textContainer.heightAnchor.constraint(equalToConstant: 50),
+            textContainer.heightAnchor.constraint(equalToConstant: 70),
 
             manualField.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: 16),
             manualField.centerYAnchor.constraint(equalTo: textContainer.centerYAnchor),

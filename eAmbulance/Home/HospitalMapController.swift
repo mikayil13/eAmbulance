@@ -188,6 +188,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         setupUI()
         setupLocationManager()
         addPanGesture()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.updateAmbulance()
@@ -199,7 +200,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         authenticateUser()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.coachMarksController.start(in: .window(over: self))
         }
@@ -528,7 +528,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         guard let annotation = view.annotation as? MKPointAnnotation,
               let title = annotation.title else { return }
-        if let selectedHospital = viewModel.hospitals.first(where: { $0.name == title }) {
+           if let selectedHospital = viewModel.hospitals.first(where: { $0.name == title }) {
             guard let userLocation = viewModel.locationManager.location else { return }
             let detailVC = DetailController()
             detailVC.userLocation = userLocation
@@ -583,7 +583,6 @@ extension HospitalMapController: UITableViewDelegate, UITableViewDataSource {
         let selectedHospital = viewModel.hospital(at: indexPath.row)
         guard let userLocation = viewModel.locationManager.location else { return }
         animatePanel(to: viewModel.halfExpandedHeight)
-        
         let hospLocation = CLLocation(latitude: selectedHospital.coordinate.latitude, longitude: selectedHospital.coordinate.longitude)
         showDistanceOnMap(from: userLocation, to: hospLocation)
         let detailVC = DetailController()
@@ -598,6 +597,16 @@ extension HospitalMapController: UITableViewDelegate, UITableViewDataSource {
             self?.startAmbulanceRequest(for: hospital)
         }
         
+        detailVC.onDismiss = { [weak self] ambulanceCalled in
+            guard let self = self else { return }
+            if !ambulanceCalled {
+                DispatchQueue.main.async {
+                    self.tableView.isHidden = false
+                    self.hospitalListContainer.isHidden = false
+                    self.destinationButton.isHidden = false
+                }
+            }
+        }
         let navController = UINavigationController(rootViewController: detailVC)
         if let sheet = navController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]

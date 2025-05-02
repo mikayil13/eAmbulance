@@ -7,6 +7,7 @@ class DetailController: UIViewController {
     var hospitalMapController: HospitalMapController?
     var selectedHospital: HospitalModel?
     var userLocation: CLLocation?
+    var onDismiss: ((_ ambulanceCalled: Bool) -> Void)?
     
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -81,11 +82,10 @@ class DetailController: UIViewController {
             closeButton.heightAnchor.constraint(equalToConstant: 35)
         ])
     }
-    
-    
-    
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
+    @objc func closeButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            self?.onDismiss?(false) 
+        }
     }
     
     private func setupButtonContainer() {
