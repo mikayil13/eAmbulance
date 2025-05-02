@@ -32,8 +32,6 @@ class ModernCoachMarkBodyView: UIView, CoachMarkBodyView {
         button.layer.cornerRadius = 18 // Daha yumşaq künclər
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         button.contentEdgeInsets = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
-        
-        // Gradient effekt
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor(red: 20/255.0, green: 109/255.0, blue: 191/255.0, alpha: 1).cgColor,
                                 UIColor(red: 15/255.0, green: 86/255.0, blue: 159/255.0, alpha: 1).cgColor]

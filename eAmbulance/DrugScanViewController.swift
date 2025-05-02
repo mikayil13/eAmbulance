@@ -1,5 +1,4 @@
 import UIKit
-import Alamofire
 import Vision
 
 final class DrugScanViewController: UIViewController {
@@ -176,18 +175,14 @@ final class DrugScanViewController: UIViewController {
             imageContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageContainer.widthAnchor.constraint(equalToConstant: 240),
             imageContainer.heightAnchor.constraint(equalToConstant: 200),
-
             drugImageView.topAnchor.constraint(equalTo: imageContainer.topAnchor),
             drugImageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
             drugImageView.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
             drugImageView.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-
             pickButton.topAnchor.constraint(equalTo: imageContainer.bottomAnchor, constant: 16),
             pickButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pickButton.widthAnchor.constraint(equalToConstant: 180),
             pickButton.heightAnchor.constraint(equalToConstant: 44),
-
-            // Text container (aşağı)
             textContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             textContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             textContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -285,63 +280,53 @@ final class DrugScanViewController: UIViewController {
     }
 
     @objc private func manualSearchTapped() {
-        guard let text = manualField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else {
-            showAlert("Xəta", "Dərman adı boş ola bilməz.")
-            return
+      guard let text = manualField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else {
+        showAlert("Xəta", "Dərman adı boş ola bilməz.")
+        return
+      }
+      showLoading(true)
+      DrugManager.shared.fetchDrugInfo(for: text) { [weak self] result in
+        DispatchQueue.main.async {
+          self?.showLoading(false)
+          switch result {
+          case .success(let info):   self?.updateResult(info)
+          case .failure(let error):  self?.showAlert("Xəta", error.localizedDescription)
+          }
         }
-        fetchDrugInfo(for: text)
+      }
     }
 
-    private func openPicker(_ type: UIImagePickerController.SourceType) {
-        imagePicker.sourceType = type
-        present(imagePicker, animated: true)
-    }
-
-    // MARK: - OCR & Networking
     private func recognizeText(on image: UIImage) {
-        guard let cg = image.cgImage else { return }
-        let request = VNRecognizeTextRequest { [weak self] req, _ in
-            guard let obs = req.results as? [VNRecognizedTextObservation], let candidate = obs.first?.topCandidates(1).first else {
-                self?.updateResult("Şəkildə mətn tapılmadı.")
-                return
+      guard let cg = image.cgImage else { return }
+      let request = VNRecognizeTextRequest { [weak self] req, _ in
+        guard let candidate = (req.results as? [VNRecognizedTextObservation])?
+                                  .first?.topCandidates(1).first else {
+          DispatchQueue.main.async { self?.updateResult("Şəkildə mətn tapılmadı.") }
+          return
+        }
+        DispatchQueue.main.async { self?.showLoading(true) }
+        DrugManager.shared.fetchDrugInfo(for: candidate.string) { [weak self] result in
+          DispatchQueue.main.async {
+            self?.showLoading(false)
+            switch result {
+            case .success(let info):   self?.updateResult(info)
+            case .failure(let error):  self?.showAlert("Xəta", error.localizedDescription)
             }
-            self?.fetchDrugInfo(for: candidate.string)
+          }
         }
-        request.recognitionLevel = .accurate
-        DispatchQueue.global(qos: .userInitiated).async {
-            try? VNImageRequestHandler(cgImage: cg, options: [:]).perform([request])
-        }
+      }
+      request.recognitionLevel = .accurate
+      DispatchQueue.global(qos: .userInitiated).async {
+        try? VNImageRequestHandler(ciImage: CIImage(cgImage: cg), options: [:])
+               .perform([request])
+      }
     }
 
-    private func fetchDrugInfo(for name: String) {
-        showLoading(true)
-        let safe = name.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? name
-        let url = "https://api.fda.gov/drug/label.json?search=openfda.brand_name:\"\(safe)\"&limit=1"
-        AF.request(url).responseJSON { [weak self] resp in
-            DispatchQueue.main.async { self?.showLoading(false) }
-            switch resp.result {
-            case .success(let data):
-                guard let json = data as? [String: Any],
-                      let results = json["results"] as? [[String: Any]],
-                      let first = results.first else {
-                    self?.updateResult("\(name) üçün məlumat tapılmadı.")
-                    return
-                }
-                var msg = ""
-                if let ing = first["active_ingredient"] as? [String] {
-                    msg += "🤖 Tərkib: \(ing.joined(separator: ", "))\n\n"
-                }
-                if let usage = first["indications_and_usage"] as? [String] {
-                    msg += "🔍 İstifadə: \(usage.joined(separator: "\n"))\n"
-                }
-                self?.updateResult(msg)
-            case .failure(let err):
-                self?.updateResult("Server xətası: \(err.localizedDescription)")
-            }
+        private func openPicker(_ type: UIImagePickerController.SourceType) {
+            imagePicker.sourceType = type
+            present(imagePicker, animated: true)
         }
-    }
 
-    // MARK: - Helpers
     private func showLoading(_ show: Bool) {
         DispatchQueue.main.async { self.loadingOverlay.isHidden = !show }
     }

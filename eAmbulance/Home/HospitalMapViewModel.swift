@@ -11,6 +11,19 @@ class HospitalMapViewModel {
     var currentSegmentIndex: Int = 0
     var segmentStartTime: TimeInterval = 0
     var hasUserRequestedAmbulance = false
+    var hospitalLocation: CLLocationCoordinate2D?
+     var currentRoute: MKPolyline?
+    var lastRotation: CGFloat = 0
+    var ambulanceAnnotationView: MKAnnotationView?
+    var animationTimer: Timer?
+    var currentRegion: MKCoordinateRegion?
+    var ambulanceAnnotation: MKPointAnnotation?
+    var lastUserLocation: CLLocation?
+     var userAnnotation: MKPointAnnotation?
+     var isPanelExpanded = false
+     let halfExpandedHeight: CGFloat = UIScreen.main.bounds.height * 0.3
+     let expandedHeight: CGFloat = UIScreen.main.bounds.height * 0.9
+     let locationManager = CLLocationManager()
     var totalAnimationDuration: TimeInterval = 10.0
     var segmentDuration: TimeInterval {
         totalAnimationDuration / TimeInterval(max(routeCoordinates.count - 1, 1))

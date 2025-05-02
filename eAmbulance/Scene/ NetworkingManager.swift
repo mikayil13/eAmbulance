@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 import Alamofire
 
 final class NetworkingManager {
@@ -20,7 +19,6 @@ final class NetworkingManager {
         completion: @escaping (Result<Any, Error>) -> Void
     ) {
         let afHeaders = HTTPHeaders(headers)
-
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: afHeaders)
             .validate()
             .responseJSON { response in
@@ -31,5 +29,18 @@ final class NetworkingManager {
                     completion(.failure(error))
                 }
             }
+    }
+    func getRequest(url: String,headers: [String: String] = [:],completion: @escaping (Result<Data, Error>) -> Void) {
+           let afHeaders = HTTPHeaders(headers)
+           AF.request(url, method: .get, headers: afHeaders)
+               .validate()
+               .responseData { response in
+                   switch response.result {
+                   case .success(let data):
+                       completion(.success(data))
+                   case .failure(let error):
+                       completion(.failure(error))
+            }
+        }
     }
 }
