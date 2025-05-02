@@ -2,11 +2,7 @@ import UIKit
 import Vision
 
 final class DrugScanViewController: UIViewController {
-    // UIViewController içində yuxarı əlavə et:
-    private var resultTopToPickButton: NSLayoutConstraint!
-    private var resultTopToModeControl: NSLayoutConstraint!
-    private var resultContainerHeightConstraint: NSLayoutConstraint!
-
+    
     private lazy var modeControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Derman Şəkil Seç", "Derman adi Yaz"])
         control.selectedSegmentIndex = 0
@@ -135,8 +131,10 @@ final class DrugScanViewController: UIViewController {
     }()
 
     private let imagePicker = UIImagePickerController()
-
-    // MARK: - Lifecycle
+    private var resultTopToPickButton: NSLayoutConstraint!
+    private var resultTopToModeControl: NSLayoutConstraint!
+    private var resultContainerHeightConstraint: NSLayoutConstraint!
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Dərman Məlumatları"
@@ -144,8 +142,6 @@ final class DrugScanViewController: UIViewController {
         setupUI()
         imagePicker.delegate = self
     }
-
-    // MARK: - Setup UI
     private func setupUI() {
         view.addSubview(modeControl)
         view.addSubview(imageContainer)
@@ -163,14 +159,12 @@ final class DrugScanViewController: UIViewController {
 
         textContainer.isHidden = true
 
-        // Constraint-lər
         NSLayoutConstraint.activate([
             modeControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             modeControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             modeControl.widthAnchor.constraint(equalToConstant: 240),
             modeControl.heightAnchor.constraint(equalToConstant: 30),
 
-            // Image mode
             imageContainer.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 20),
             imageContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageContainer.widthAnchor.constraint(equalToConstant: 240),
@@ -204,13 +198,12 @@ final class DrugScanViewController: UIViewController {
             loadingOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        // ResultContainer constraintləri ayrıca
         resultTopToPickButton = resultContainer.topAnchor.constraint(equalTo: pickButton.bottomAnchor, constant: 24)
         resultTopToModeControl = resultContainer.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 24)
-        resultTopToModeControl.isActive = false // Başlanğıcda bağlıdır
+        resultTopToModeControl.isActive = false
 
         resultContainerHeightConstraint = resultContainer.heightAnchor.constraint(equalToConstant: 400)
-        resultContainerHeightConstraint.isActive = false // Başlanğıcda bağlıdır
+        resultContainerHeightConstraint.isActive = false
 
         NSLayoutConstraint.activate([
             resultTopToPickButton,
@@ -224,10 +217,6 @@ final class DrugScanViewController: UIViewController {
             resultTextView.trailingAnchor.constraint(equalTo: resultContainer.trailingAnchor, constant: -12),
         ])
     }
-
-
-
-    // MARK: - Button Factory
     private func makeButton(title: String, action: Selector) -> UIButton {
         let btn = UIButton(type: .system)
         btn.setTitle(title, for: .normal)
@@ -243,32 +232,21 @@ final class DrugScanViewController: UIViewController {
         return btn
     }
 
-    // MARK: - Actions
     @objc private func modeChanged() {
         let manual = modeControl.selectedSegmentIndex == 1
-        
-        // UI elementlərinin görünüşünü dərhal dəyişirik
         imageContainer.alpha = manual ? 0 : 1
         pickButton.alpha = manual ? 0 : 1
         textContainer.alpha = manual ? 1 : 0
-
-        // Constraint-ləri dəyişirik
         resultTopToPickButton.isActive = !manual
         resultTopToModeControl.isActive = manual
         resultContainerHeightConstraint.isActive = manual
 
         self.view.layoutIfNeeded()
-
-        // Segmentin ölçüsü dəyişmir (sabit qalır)
         imageContainer.isHidden = manual
         pickButton.isHidden = manual
         textContainer.isHidden = !manual
-
-        // Nəticəni sıfırlayırıq
         resultTextView.text = ""
     }
-
-
     @objc private func selectImageTapped() {
         let sheet = UIAlertController(title: "Şəkil Seçimi", message: nil, preferredStyle: .actionSheet)
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -295,7 +273,7 @@ final class DrugScanViewController: UIViewController {
         }
       }
     }
-
+    
     private func recognizeText(on image: UIImage) {
       guard let cg = image.cgImage else { return }
       let request = VNRecognizeTextRequest { [weak self] req, _ in

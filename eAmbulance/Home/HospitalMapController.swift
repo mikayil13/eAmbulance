@@ -49,8 +49,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         btn.tintColor = .gray
         btn.imageView?.contentMode = .scaleAspectFit
         btn.contentHorizontalAlignment = .left
-        btn.contentEdgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 8)
         btn.addTarget(self, action: #selector(destinationTapped), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
