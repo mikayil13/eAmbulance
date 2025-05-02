@@ -457,8 +457,8 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         let hospLocation = CLLocation(latitude: nearestHospital.coordinate.latitude, longitude: nearestHospital.coordinate.longitude)
         showDistanceOnMap(from: userLocation, to: hospLocation)
         startAmbulanceRequest(for: nearestHospital)
+        mapView.isUserInteractionEnabled = false
     }
-
     func showDistanceOnMap(from userLocation: CLLocation, to hospitalLocation: CLLocation) {
         removeRoute()
         let polyline = viewModel.createRoutePolyline(from: hospitalLocation, to: userLocation)
