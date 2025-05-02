@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>HUGGINGFACE_API_KEY</key>
+    <string>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</string>
+
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>app-1-816763698416-ios-0745344999cb47f0f69635</string>
+            </array>
+        </dict>
+    </array>
+
+    <key>NSFaceIDUsageDescription</key>
+    <string>Xəritəyə giriş üçün Face ID istifadə olunur.</string>
+
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+                    <key>UISceneStoryboardFile</key>
+                    <string>Main</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Bu tətbiq xəritədə yerinizi göstərmək üçün yer məlumatına ehtiyac duyur.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Bu tətbiq yerinizi müəyyən etmək üçün icazə tələb edir.</string>
+
+</dict>
+</plist>
+

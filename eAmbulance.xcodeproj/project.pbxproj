@@ -1,0 +1,686 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		764570DB2DC153CD0071E084 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 764570DA2DC153CD0071E084 /* Alamofire */; };
+		764570DE2DC153E10071E084 /* Instructions in Frameworks */ = {isa = PBXBuildFile; productRef = 764570DD2DC153E10071E084 /* Instructions */; };
+		764570E12DC1543D0071E084 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E02DC1543D0071E084 /* FirebaseAnalytics */; };
+		764570E32DC1543D0071E084 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E22DC1543D0071E084 /* FirebaseAuth */; };
+		764570E52DC1543D0071E084 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E42DC1543D0071E084 /* FirebaseCore */; };
+		764570E72DC1543D0071E084 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E62DC1543D0071E084 /* FirebaseDatabase */; };
+		764570E92DC1543D0071E084 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E82DC1543D0071E084 /* FirebaseFirestore */; };
+		764570EB2DC1543D0071E084 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 764570EA2DC1543D0071E084 /* FirebaseFunctions */; };
+		764570ED2DC1543D0071E084 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 764570EC2DC1543D0071E084 /* FirebaseMessaging */; };
+		764570EF2DC1543D0071E084 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 764570EE2DC1543D0071E084 /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		764570BA2DC1533A0071E084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7645709B2DC153380071E084 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 764570A22DC153380071E084;
+			remoteInfo = eAmbulance;
+		};
+		764570C42DC1533A0071E084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7645709B2DC153380071E084 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 764570A22DC153380071E084;
+			remoteInfo = eAmbulance;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		764570A32DC153380071E084 /* eAmbulance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eAmbulance.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		764570B92DC1533A0071E084 /* eAmbulanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = eAmbulanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		764570C32DC1533A0071E084 /* eAmbulanceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = eAmbulanceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		764570CB2DC1533A0071E084 /* Exceptions for "eAmbulance" folder in "eAmbulance" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 764570A22DC153380071E084 /* eAmbulance */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		764570A52DC153380071E084 /* eAmbulance */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				764570CB2DC1533A0071E084 /* Exceptions for "eAmbulance" folder in "eAmbulance" target */,
+			);
+			path = eAmbulance;
+			sourceTree = "<group>";
+		};
+		764570BC2DC1533A0071E084 /* eAmbulanceTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = eAmbulanceTests;
+			sourceTree = "<group>";
+		};
+		764570C62DC1533A0071E084 /* eAmbulanceUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = eAmbulanceUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		764570A02DC153380071E084 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				764570ED2DC1543D0071E084 /* FirebaseMessaging in Frameworks */,
+				764570E72DC1543D0071E084 /* FirebaseDatabase in Frameworks */,
+				764570DB2DC153CD0071E084 /* Alamofire in Frameworks */,
+				764570EF2DC1543D0071E084 /* FirebaseStorage in Frameworks */,
+				764570E52DC1543D0071E084 /* FirebaseCore in Frameworks */,
+				764570EB2DC1543D0071E084 /* FirebaseFunctions in Frameworks */,
+				764570DE2DC153E10071E084 /* Instructions in Frameworks */,
+				764570E12DC1543D0071E084 /* FirebaseAnalytics in Frameworks */,
+				764570E32DC1543D0071E084 /* FirebaseAuth in Frameworks */,
+				764570E92DC1543D0071E084 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		764570B62DC1533A0071E084 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		764570C02DC1533A0071E084 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7645709A2DC153380071E084 = {
+			isa = PBXGroup;
+			children = (
+				764570A52DC153380071E084 /* eAmbulance */,
+				764570BC2DC1533A0071E084 /* eAmbulanceTests */,
+				764570C62DC1533A0071E084 /* eAmbulanceUITests */,
+				764570A42DC153380071E084 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		764570A42DC153380071E084 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				764570A32DC153380071E084 /* eAmbulance.app */,
+				764570B92DC1533A0071E084 /* eAmbulanceTests.xctest */,
+				764570C32DC1533A0071E084 /* eAmbulanceUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		764570A22DC153380071E084 /* eAmbulance */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 764570CC2DC1533A0071E084 /* Build configuration list for PBXNativeTarget "eAmbulance" */;
+			buildPhases = (
+				7645709F2DC153380071E084 /* Sources */,
+				764570A02DC153380071E084 /* Frameworks */,
+				764570A12DC153380071E084 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				764570A52DC153380071E084 /* eAmbulance */,
+			);
+			name = eAmbulance;
+			packageProductDependencies = (
+				764570DA2DC153CD0071E084 /* Alamofire */,
+				764570DD2DC153E10071E084 /* Instructions */,
+				764570E02DC1543D0071E084 /* FirebaseAnalytics */,
+				764570E22DC1543D0071E084 /* FirebaseAuth */,
+				764570E42DC1543D0071E084 /* FirebaseCore */,
+				764570E62DC1543D0071E084 /* FirebaseDatabase */,
+				764570E82DC1543D0071E084 /* FirebaseFirestore */,
+				764570EA2DC1543D0071E084 /* FirebaseFunctions */,
+				764570EC2DC1543D0071E084 /* FirebaseMessaging */,
+				764570EE2DC1543D0071E084 /* FirebaseStorage */,
+			);
+			productName = eAmbulance;
+			productReference = 764570A32DC153380071E084 /* eAmbulance.app */;
+			productType = "com.apple.product-type.application";
+		};
+		764570B82DC1533A0071E084 /* eAmbulanceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 764570D12DC1533A0071E084 /* Build configuration list for PBXNativeTarget "eAmbulanceTests" */;
+			buildPhases = (
+				764570B52DC1533A0071E084 /* Sources */,
+				764570B62DC1533A0071E084 /* Frameworks */,
+				764570B72DC1533A0071E084 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				764570BB2DC1533A0071E084 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				764570BC2DC1533A0071E084 /* eAmbulanceTests */,
+			);
+			name = eAmbulanceTests;
+			packageProductDependencies = (
+			);
+			productName = eAmbulanceTests;
+			productReference = 764570B92DC1533A0071E084 /* eAmbulanceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		764570C22DC1533A0071E084 /* eAmbulanceUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 764570D42DC1533A0071E084 /* Build configuration list for PBXNativeTarget "eAmbulanceUITests" */;
+			buildPhases = (
+				764570BF2DC1533A0071E084 /* Sources */,
+				764570C02DC1533A0071E084 /* Frameworks */,
+				764570C12DC1533A0071E084 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				764570C52DC1533A0071E084 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				764570C62DC1533A0071E084 /* eAmbulanceUITests */,
+			);
+			name = eAmbulanceUITests;
+			packageProductDependencies = (
+			);
+			productName = eAmbulanceUITests;
+			productReference = 764570C32DC1533A0071E084 /* eAmbulanceUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7645709B2DC153380071E084 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					764570A22DC153380071E084 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					764570B82DC1533A0071E084 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 764570A22DC153380071E084;
+					};
+					764570C22DC1533A0071E084 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 764570A22DC153380071E084;
+					};
+				};
+			};
+			buildConfigurationList = 7645709E2DC153380071E084 /* Build configuration list for PBXProject "eAmbulance" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7645709A2DC153380071E084;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				764570D92DC153CD0071E084 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				764570DC2DC153E10071E084 /* XCRemoteSwiftPackageReference "Instructions" */,
+				764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 764570A42DC153380071E084 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				764570A22DC153380071E084 /* eAmbulance */,
+				764570B82DC1533A0071E084 /* eAmbulanceTests */,
+				764570C22DC1533A0071E084 /* eAmbulanceUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		764570A12DC153380071E084 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		764570B72DC1533A0071E084 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		764570C12DC1533A0071E084 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7645709F2DC153380071E084 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		764570B52DC1533A0071E084 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		764570BF2DC1533A0071E084 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		764570BB2DC1533A0071E084 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 764570A22DC153380071E084 /* eAmbulance */;
+			targetProxy = 764570BA2DC1533A0071E084 /* PBXContainerItemProxy */;
+		};
+		764570C52DC1533A0071E084 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 764570A22DC153380071E084 /* eAmbulance */;
+			targetProxy = 764570C42DC1533A0071E084 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		764570CD2DC1533A0071E084 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = eAmbulance/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mikayil.eAmbulance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		764570CE2DC1533A0071E084 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = eAmbulance/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mikayil.eAmbulance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		764570CF2DC1533A0071E084 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		764570D02DC1533A0071E084 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		764570D22DC1533A0071E084 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mikayil.eAmbulanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/eAmbulance.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/eAmbulance";
+			};
+			name = Debug;
+		};
+		764570D32DC1533A0071E084 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mikayil.eAmbulanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/eAmbulance.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/eAmbulance";
+			};
+			name = Release;
+		};
+		764570D52DC1533A0071E084 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mikayil.eAmbulanceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = eAmbulance;
+			};
+			name = Debug;
+		};
+		764570D62DC1533A0071E084 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mikayil.eAmbulanceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = eAmbulance;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7645709E2DC153380071E084 /* Build configuration list for PBXProject "eAmbulance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				764570CF2DC1533A0071E084 /* Debug */,
+				764570D02DC1533A0071E084 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		764570CC2DC1533A0071E084 /* Build configuration list for PBXNativeTarget "eAmbulance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				764570CD2DC1533A0071E084 /* Debug */,
+				764570CE2DC1533A0071E084 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		764570D12DC1533A0071E084 /* Build configuration list for PBXNativeTarget "eAmbulanceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				764570D22DC1533A0071E084 /* Debug */,
+				764570D32DC1533A0071E084 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		764570D42DC1533A0071E084 /* Build configuration list for PBXNativeTarget "eAmbulanceUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				764570D52DC1533A0071E084 /* Debug */,
+				764570D62DC1533A0071E084 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		764570D92DC153CD0071E084 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		764570DC2DC153E10071E084 /* XCRemoteSwiftPackageReference "Instructions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ephread/Instructions";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
+		764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		764570DA2DC153CD0071E084 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570D92DC153CD0071E084 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		764570DD2DC153E10071E084 /* Instructions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DC2DC153E10071E084 /* XCRemoteSwiftPackageReference "Instructions" */;
+			productName = Instructions;
+		};
+		764570E02DC1543D0071E084 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		764570E22DC1543D0071E084 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		764570E42DC1543D0071E084 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		764570E62DC1543D0071E084 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		764570E82DC1543D0071E084 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		764570EA2DC1543D0071E084 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+		764570EC2DC1543D0071E084 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		764570EE2DC1543D0071E084 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 7645709B2DC153380071E084 /* Project object */;
+}
