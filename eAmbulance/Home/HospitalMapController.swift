@@ -316,21 +316,22 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
           })
       }
   
-    
     @objc private func closeButtonTapped() {
         collapsePanels()
-        
     }
+    
     @objc func showSOSCoachMark() {
         sosButton.isHidden = true
         DispatchQueue.main.async {
             self.coachMarksController.start(in: .window(over: self))
         }
     }
+    
     @objc func startSOSCoachMark() {
         sosButton.isHidden = true
         coachMarksController.start(in: .window(over: self))
     }
+    
     func addHospitalAnnotations() {
         let existingHospitalAnnotations = mapView.annotations.filter { $0.title != "Ambulans" }
         mapView.removeAnnotations(existingHospitalAnnotations)
@@ -345,13 +346,16 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             mapView.addAnnotation(annotation)
         }
     }
+    
     private func addPanGesture() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panelView.addGestureRecognizer(pan)
     }
+    
     @objc private func destinationTapped() {
         expandPanels()
     }
+    
     func startFlashingTextAnimation() {
         UIView.animate(withDuration: 0.8,
                        delay: 0,
@@ -360,11 +364,13 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             self.ambulanceStatusLabel.alpha = 0.2
         }, completion: nil)
     }
+    
     private func setupLocationManager() {
         viewModel.locationManager.delegate = self
         viewModel.locationManager.requestWhenInUseAuthorization()
         viewModel.locationManager.startUpdatingLocation()
     }
+    
     public func animatePanel(to height: CGFloat) {
         let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 0.8) {
             self.panelHeightConstraint.constant = height
@@ -373,6 +379,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         }
         animator.startAnimation()
     }
+    
     @objc func startAmbulanceAnimation() {
         guard viewModel.routeCoordinates.count > 1 else {
             print("Route koordinatları boşdur!")
@@ -396,6 +403,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         }
         viewModel.ambulanceAnnotationView?.transform = .identity
     }
+    
     @objc func cancelButtonTapped() {
         viewModel.animationTimer?.invalidate()
         viewModel.animationTimer = nil
@@ -430,6 +438,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    
     func startAmbulanceRequest(for hospital: HospitalModel) {
         hospitalListContainer.isHidden = true
         hospitalNameLabel.text = hospital.name
@@ -438,6 +447,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         viewModel.hasUserRequestedAmbulance = true
         startAmbulanceAnimation()
     }
+    
     @objc func sosButtonTapped() {
         hospitalListContainer.isHidden = true
         destinationButton.isHidden = true
@@ -461,6 +471,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         startAmbulanceRequest(for: nearestHospital)
         mapView.isUserInteractionEnabled = false
     }
+    
     func showDistanceOnMap(from userLocation: CLLocation, to hospitalLocation: CLLocation) {
         removeRoute()
         let polyline = viewModel.createRoutePolyline(from: hospitalLocation, to: userLocation)
@@ -474,6 +485,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         viewModel.currentRoute = polyline
         startAmbulanceAnimation()
     }
+    
     func moveAmbulance(to hospital: HospitalModel, userLocation: CLLocation) {
         removeRoute()
         if let ambulanceAnnotation = viewModel.ambulanceAnnotation {
@@ -494,12 +506,14 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         mapView.addOverlay(polyline)
         startAmbulanceAnimation()
     }
+    
     func moveAmbulanceRoute(from startLocation: CLLocation, to endLocation: CLLocation) {
         removeRoute()
         let polyline = viewModel.createRoutePolyline(from: startLocation.coordinate, to: endLocation.coordinate)
         mapView.addOverlay(polyline)
         startAmbulanceAnimation()
     }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
             return createUserLocationAnnotationView(for: annotation, in: mapView)
@@ -511,6 +525,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             return createHospitalAnnotationView(for: annotation, in: mapView)
         }
     }
+    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let polyline = overlay as? MKPolyline {
             let renderer = MKPolylineRenderer(polyline: polyline)
@@ -527,6 +542,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             mapView.removeOverlays(overlays)
         }
     }
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
        guard let annotation = view.annotation as? MKPointAnnotation,
          let title = annotation.title else { return }
@@ -535,7 +551,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
                coordinator?.showDetail(for: selectedHospital, userLocation: userLocation)
            }
        }
-   
     func openMapForHospital(hospital: HospitalModel) {
         guard let userCoordinate = mapView.userLocation.location?.coordinate else { return }
         viewModel.openMapForHospital(hospital: hospital, userCoordinate: userCoordinate)
@@ -578,7 +593,7 @@ extension HospitalMapController: CoachMarksControllerDataSource {
     func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
         return 1
     }
-
+    
     func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkAt index: Int) -> CoachMark {
         guard let sosButton = self.view.subviews.first(where: { $0 is UIButton && $0 == self.sosButton }) as? UIButton else {
             fatalError("SOS button could not be found.")
@@ -600,7 +615,6 @@ extension HospitalMapController: CoachMarksControllerDataSource {
         default:
             bodyView.hintLabel.text = "Başlamaq üçün hazırsınız!"
         }
-
         return (bodyView: bodyView, arrowView: arrowView)
     }
 }
@@ -662,10 +676,7 @@ extension HospitalMapController {
     }
     private func expandPanels() {
         viewModel.isPanelExpanded = true
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0.5,
+        UIView.animate(withDuration: 0.5,delay: 0,usingSpringWithDamping: 0.8,initialSpringVelocity: 0.5,
                        options: .allowUserInteraction) {
             self.panelHeightConstraint.constant = self.viewModel.expandedHeight
             self.topPanelTopConstraint.constant = 0
@@ -678,10 +689,7 @@ extension HospitalMapController {
 
     @objc  func collapsePanels() {
         viewModel.isPanelExpanded = false
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0.5,
+        UIView.animate(withDuration: 0.5,delay: 0,usingSpringWithDamping: 0.8,initialSpringVelocity: 0.5,
                        options: .allowUserInteraction) {
             self.panelHeightConstraint.constant = self.viewModel.halfExpandedHeight
             self.topPanelTopConstraint.constant = -self.topPanelHeight

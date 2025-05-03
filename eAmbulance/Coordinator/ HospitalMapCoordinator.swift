@@ -37,34 +37,23 @@ class HospitalMapCoordinator: Coordinator {
     func didSelectHospital(at indexPath: IndexPath, from viewModel: HospitalMapViewModel) {
         let selectedHospital = viewModel.hospital(at: indexPath.row)
         guard let userLocation = viewModel.locationManager.location else { return }
-
         guard let mapVC = navigationController.viewControllers
             .compactMap({ $0 as? HospitalMapController }).first else { return }
-
-        // Panel animasiyası və məsafə göstər
         mapVC.animatePanel(to: mapVC.viewModel.halfExpandedHeight)
         let hospitalLocation = CLLocation(latitude: selectedHospital.coordinate.latitude,
                                           longitude: selectedHospital.coordinate.longitude)
         mapVC.showDistanceOnMap(from: userLocation, to: hospitalLocation)
-
-        // UI gizlət
         mapVC.hospitalListContainer.isHidden = true
         mapVC.destinationButton.isHidden = true
         mapVC.tableView.isHidden = true
         mapVC.collapsePanels()
-
-        // Detal ekranı göstər
         let detailVC = DetailController()
         detailVC.hospitalDetail = selectedHospital
         detailVC.userLocation = userLocation
-
-        // Ambulans çağırılarsa
         detailVC.onAmbulanceRequested = { [weak mapVC] hospital in
             mapVC?.moveAmbulance(to: hospital, userLocation: userLocation)
             mapVC?.startAmbulanceRequest(for: hospital)
         }
-
-        // Detail bağlananda - əgər ambulance çağırılmayıbsa, UI geri qaytar
         detailVC.onDismiss = { [weak mapVC] ambulanceCalled in
             if !ambulanceCalled {
                 DispatchQueue.main.async {
@@ -74,7 +63,6 @@ class HospitalMapCoordinator: Coordinator {
                 }
             }
         }
-
         let nav = UINavigationController(rootViewController: detailVC)
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
