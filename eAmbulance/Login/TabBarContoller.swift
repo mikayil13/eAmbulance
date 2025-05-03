@@ -27,20 +27,26 @@ override func viewDidAppear(_ animated: Bool) {
         self.coachMarksController.start(in: .window(over: self))
     }
 }
+    var hospitalMapCoordinator: HospitalMapCoordinator?
 
-private func setupTabBar() {
-    let locationVC = createNavController(viewController: HospitalMapController(), title: "Xəritə", image: "mappin.and.ellipse")
-    let aiVC = createNavController(viewController: AIViewController(), title: "Chat", image: "bubble.left.and.bubble.right.fill")
-    let drugScanVC = createNavController(viewController: DrugScanViewController(), title: "Tanınma", image: "camera.viewfinder")
-    let settingsVC = createNavController(viewController: SettingsViewController(), title: "Ayarlar", image: "gearshape.fill")
-    
-    viewControllers = [locationVC, aiVC, drugScanVC, settingsVC]
-    
-    let selectedColor = UIColor(red: 20/255.0, green: 109/255.0, blue: 191/255.0, alpha: 1)
-    tabBar.tintColor = selectedColor
-    tabBar.backgroundColor = .white
-}
+    private func setupTabBar() {
+        let mapVC = HospitalMapController()
+        let locationNav = createNavController(viewController: mapVC, title: "Xəritə", image: "mappin.and.ellipse")
 
+        let coordinator = HospitalMapCoordinator(navigationController: locationNav)
+        mapVC.coordinator = coordinator
+        self.hospitalMapCoordinator = coordinator
+
+        let aiVC = createNavController(viewController: AIViewController(), title: "Chat", image: "bubble.left.and.bubble.right.fill")
+        let drugScanVC = createNavController(viewController: DrugScanViewController(), title: "Tanınma", image: "camera.viewfinder")
+        let settingsVC = createNavController(viewController: SettingsViewController(), title: "Ayarlar", image: "gearshape.fill")
+
+        viewControllers = [locationNav, aiVC, drugScanVC, settingsVC]
+
+        let selectedColor = UIColor(red: 20/255.0, green: 109/255.0, blue: 191/255.0, alpha: 1)
+        tabBar.tintColor = selectedColor
+        tabBar.backgroundColor = .white
+    }
     private func createNavController(viewController: UIViewController, title: String, image: String) -> UINavigationController {
         let nav = UINavigationController(rootViewController: viewController)
         nav.tabBarItem.title = title

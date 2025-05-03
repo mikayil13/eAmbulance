@@ -38,7 +38,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         return handle
     }()
     
-    private lazy var destinationButton: UIButton = {
+      public lazy var destinationButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.backgroundColor = UIColor.systemGray6
         btn.setTitle("Xəstəxana seçin və ya axtarın", for: .normal)
@@ -54,7 +54,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         return btn
     }()
     
-    private let hospitalListContainer: UIView = {
+      public let hospitalListContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -166,7 +166,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         return stack
     }()
     
-    private let tableView: UITableView = {
+    public let tableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .systemGray6
         table.separatorStyle = .none
@@ -182,6 +182,8 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     private var topPanelTopConstraint: NSLayoutConstraint!
     private var panelHeightConstraint: NSLayoutConstraint!
     private var searchOverlayView: UIView?
+    var coordinator: HospitalMapCoordinator?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -363,7 +365,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         viewModel.locationManager.requestWhenInUseAuthorization()
         viewModel.locationManager.startUpdatingLocation()
     }
-    private func animatePanel(to height: CGFloat) {
+    public func animatePanel(to height: CGFloat) {
         let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 0.8) {
             self.panelHeightConstraint.constant = height
             self.panelView.layer.cornerRadius = (height == self.viewModel.expandedHeight) ? 0 : 16
@@ -526,26 +528,14 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         }
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        guard let annotation = view.annotation as? MKPointAnnotation,
-              let title = annotation.title else { return }
+       guard let annotation = view.annotation as? MKPointAnnotation,
+         let title = annotation.title else { return }
            if let selectedHospital = viewModel.hospitals.first(where: { $0.name == title }) {
-            guard let userLocation = viewModel.locationManager.location else { return }
-            let detailVC = DetailController()
-            detailVC.userLocation = userLocation
-            detailVC.hospitalDetail = selectedHospital
-            detailVC.onAmbulanceRequested = { [weak self] hospital in
-                self?.moveAmbulance(to: hospital, userLocation: userLocation)
-            }
-            let navController = UINavigationController(rootViewController: detailVC)
-            if let sheet = navController.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
-                sheet.prefersGrabberVisible = true
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                navController.isModalInPresentation = true
-            }
-            present(navController, animated: true)
-        }
-    }
+               guard let userLocation = viewModel.locationManager.location else { return }
+               coordinator?.showDetail(for: selectedHospital, userLocation: userLocation)
+           }
+       }
+   
     func openMapForHospital(hospital: HospitalModel) {
         guard let userCoordinate = mapView.userLocation.location?.coordinate else { return }
         viewModel.openMapForHospital(hospital: hospital, userCoordinate: userCoordinate)
@@ -580,42 +570,9 @@ extension HospitalMapController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedHospital = viewModel.hospital(at: indexPath.row)
-        guard let userLocation = viewModel.locationManager.location else { return }
-        animatePanel(to: viewModel.halfExpandedHeight)
-        let hospLocation = CLLocation(latitude: selectedHospital.coordinate.latitude, longitude: selectedHospital.coordinate.longitude)
-        showDistanceOnMap(from: userLocation, to: hospLocation)
-        let detailVC = DetailController()
-        detailVC.userLocation = userLocation
-        detailVC.hospitalDetail = selectedHospital
-        hospitalListContainer.isHidden = true
-        destinationButton.isHidden = true
-        tableView.isHidden = true
-        collapsePanels()
-        detailVC.onAmbulanceRequested = { [weak self] hospital in
-            self?.moveAmbulance(to: hospital, userLocation: userLocation)
-            self?.startAmbulanceRequest(for: hospital)
-        }
-        
-        detailVC.onDismiss = { [weak self] ambulanceCalled in
-            guard let self = self else { return }
-            if !ambulanceCalled {
-                DispatchQueue.main.async {
-                    self.tableView.isHidden = false
-                    self.hospitalListContainer.isHidden = false
-                    self.destinationButton.isHidden = false
-                }
-            }
-        }
-        let navController = UINavigationController(rootViewController: detailVC)
-        if let sheet = navController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            navController.isModalInPresentation = true
-        }
-        present(navController, animated: true)
+        coordinator?.didSelectHospital(at: indexPath, from: viewModel)
     }
+
 }
 extension HospitalMapController: CoachMarksControllerDataSource {
     func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
@@ -703,7 +660,6 @@ extension HospitalMapController {
             break
         }
     }
-
     private func expandPanels() {
         viewModel.isPanelExpanded = true
         UIView.animate(withDuration: 0.5,
@@ -720,7 +676,7 @@ extension HospitalMapController {
         }
     }
 
-    @objc private func collapsePanels() {
+    @objc  func collapsePanels() {
         viewModel.isPanelExpanded = false
         UIView.animate(withDuration: 0.5,
                        delay: 0,
