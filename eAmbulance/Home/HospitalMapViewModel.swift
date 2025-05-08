@@ -208,4 +208,3 @@ extension CLLocation {
         return bearing
     }
 }
-

@@ -128,12 +128,49 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         progress.translatesAutoresizingMaskIntoConstraints = false
         return progress
     }()
+    private let preparingLabel: UILabel = {
+           let lbl = UILabel()
+           lbl.text = "Hazırlanır"
+           lbl.font = .systemFont(ofSize: 12)
+           lbl.textColor = .gray
+           lbl.textAlignment = .left
+           lbl.translatesAutoresizingMaskIntoConstraints = false
+           return lbl
+       }()
+       
+       private let onTheWayLabel: UILabel = {
+           let lbl = UILabel()
+           lbl.text = "Yolda"
+           lbl.font = .systemFont(ofSize: 12)
+           lbl.textColor = .gray
+           lbl.textAlignment = .center
+           lbl.translatesAutoresizingMaskIntoConstraints = false
+           return lbl
+       }()
+       
+       private let arrivedLabel: UILabel = {
+           let lbl = UILabel()
+           lbl.text = "Çatdı"
+           lbl.font = .systemFont(ofSize: 12)
+           lbl.textColor = .gray
+           lbl.textAlignment = .right
+           lbl.translatesAutoresizingMaskIntoConstraints = false
+           return lbl
+       }()
+       
+       private lazy var statusLabelsStack: UIStackView = {
+           let stack = UIStackView(arrangedSubviews: [preparingLabel, onTheWayLabel, arrivedLabel])
+           stack.axis = .horizontal
+           stack.distribution = .fillEqually
+           stack.translatesAutoresizingMaskIntoConstraints = false
+           return stack
+       }()
        
     private lazy var cancelButton: UIButton = {
            let button = UIButton(type: .system)
            button.setTitle("Gedişi ləğv et", for: .normal)
            button.setTitleColor(.black, for: .normal)
-           button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+           button.setImage(UIImage(systemName: "circle.slash"), for: .normal)
            button.tintColor = .black
            button.translatesAutoresizingMaskIntoConstraints = false
            button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
@@ -299,7 +336,12 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         ambulanceStatusContainer.addSubview(statusContainer)
         statusContainer.addSubview(statusTitleLabel)
         statusContainer.addSubview(etaLabel)
+        statusContainer.addSubview(statusLabelsStack)
         statusContainer.addSubview(progressView)
+        statusContainer.addSubview(statusTitleLabel)
+        statusContainer.addSubview(etaLabel)
+        statusContainer.addSubview(progressView)
+        statusContainer.addSubview(statusLabelsStack)
 
         ambulanceStatusContainer.addSubview(cancelButton)
         ambulanceStatusContainer.addSubview(warningLabel)
@@ -345,7 +387,10 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: panelView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: panelView.bottomAnchor),
 
-            // ambulanceStatusContainer — **sırf** panelView-ə bağlanır
+            statusLabelsStack.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 4),
+            statusLabelsStack.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
+            statusLabelsStack.trailingAnchor.constraint(equalTo: statusContainer.trailingAnchor, constant: -12),
+            statusLabelsStack.bottomAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: -12),
             ambulanceStatusContainer.topAnchor.constraint(equalTo: panelView.topAnchor),
             ambulanceStatusContainer.leadingAnchor.constraint(equalTo: panelView.leadingAnchor),
             ambulanceStatusContainer.trailingAnchor.constraint(equalTo: panelView.trailingAnchor),
@@ -372,11 +417,20 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
 
             statusTitleLabel.topAnchor.constraint(equalTo: statusContainer.topAnchor, constant: 12),
             statusTitleLabel.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
-            etaLabel.topAnchor.constraint(equalTo: statusTitleLabel.bottomAnchor, constant: 4),
-            etaLabel.leadingAnchor.constraint(equalTo: statusTitleLabel.leadingAnchor),
-            progressView.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
-            progressView.trailingAnchor.constraint(equalTo: statusContainer.trailingAnchor, constant: -12),
-            progressView.bottomAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: -12),
+              etaLabel.topAnchor.constraint(equalTo: statusTitleLabel.bottomAnchor, constant: 4),
+              etaLabel.leadingAnchor.constraint(equalTo: statusTitleLabel.leadingAnchor),
+
+              // — progressView
+              progressView.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
+              progressView.trailingAnchor.constraint(equalTo: statusContainer.trailingAnchor, constant: -12),
+              progressView.topAnchor.constraint(equalTo: etaLabel.bottomAnchor, constant: 8),
+              progressView.heightAnchor.constraint(equalToConstant: 10),
+
+              // — statusLabelsStack
+              statusLabelsStack.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 4),
+              statusLabelsStack.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
+              statusLabelsStack.trailingAnchor.constraint(equalTo: statusContainer.trailingAnchor, constant: -12),
+              statusLabelsStack.bottomAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: -12),
 
             // cancelButton & warningLabel
             cancelButton.topAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: 16),
@@ -416,10 +470,9 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         ])
 
         // CoachMark notification
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(startSOSCoachMark),
-                                               name: Notification.Name("ShowSOSCoachMark"),
-                                               object: nil)
+    NotificationCenter.default.addObserver(self,selector: #selector(startSOSCoachMark),
+                                                     name: Notification.Name("ShowSOSCoachMark"),
+                                                      object: nil)
 
         // Z-order
         view.bringSubviewToFront(sosButton)
