@@ -46,6 +46,7 @@ class HospitalMapCoordinator: Coordinator {
         mapVC.hospitalListContainer.isHidden = true
         mapVC.destinationButton.isHidden = true
         mapVC.tableView.isHidden = true
+        mapVC.tabBarController?.tabBar.isHidden = true
         mapVC.collapsePanels()
         let detailVC = DetailController()
         detailVC.hospitalDetail = selectedHospital
@@ -70,7 +71,6 @@ class HospitalMapCoordinator: Coordinator {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             nav.isModalInPresentation = true
         }
-
         navigationController.present(nav, animated: true)
     }
 

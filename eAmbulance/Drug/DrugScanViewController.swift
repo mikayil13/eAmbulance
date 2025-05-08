@@ -16,7 +16,6 @@ final class DrugScanViewController: UIViewController {
         control.layer.shadowOpacity = 0.1
         control.layer.shadowOffset = CGSize(width: 0, height: 2)
         control.layer.shadowRadius = 4
-
         control.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
@@ -41,7 +40,6 @@ final class DrugScanViewController: UIViewController {
         return btn
     }()
 
-    // Text mode container
     private lazy var textContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
@@ -53,26 +51,22 @@ final class DrugScanViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    // Manual Field dizaynı
+   
     private lazy var manualField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Dərman adını daxil edin"
         tf.backgroundColor = .white
         tf.layer.cornerRadius = 12
         tf.layer.masksToBounds = true
-
         let icon = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         icon.tintColor = .systemGray
         icon.contentMode = .scaleAspectFit
         icon.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
         icon.center = container.center
         container.addSubview(icon)
-
         tf.leftView = container
         tf.leftViewMode = .always
-
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -147,16 +141,12 @@ final class DrugScanViewController: UIViewController {
         view.addSubview(imageContainer)
         imageContainer.addSubview(drugImageView)
         view.addSubview(pickButton)
-
         view.addSubview(resultContainer)
         resultContainer.addSubview(resultTextView)
-
         view.addSubview(textContainer)
         textContainer.addSubview(manualField)
         textContainer.addSubview(searchButton)
-
         view.addSubview(loadingOverlay)
-
         textContainer.isHidden = true
 
         NSLayoutConstraint.activate([
@@ -201,7 +191,6 @@ final class DrugScanViewController: UIViewController {
         resultTopToPickButton = resultContainer.topAnchor.constraint(equalTo: pickButton.bottomAnchor, constant: 24)
         resultTopToModeControl = resultContainer.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 24)
         resultTopToModeControl.isActive = false
-
         resultContainerHeightConstraint = resultContainer.heightAnchor.constraint(equalToConstant: 400)
         resultContainerHeightConstraint.isActive = false
 
@@ -240,7 +229,6 @@ final class DrugScanViewController: UIViewController {
         resultTopToPickButton.isActive = !manual
         resultTopToModeControl.isActive = manual
         resultContainerHeightConstraint.isActive = manual
-
         self.view.layoutIfNeeded()
         imageContainer.isHidden = manual
         pickButton.isHidden = manual
@@ -252,7 +240,7 @@ final class DrugScanViewController: UIViewController {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             sheet.addAction(.init(title: "Kamera", style: .default) { _ in self.openPicker(.camera) })
         }
-        sheet.addAction(.init(title: "Şəkil sec", style: .default) { _ in self.openPicker(.photoLibrary) })
+        sheet.addAction(.init(title: "Şəkil seç", style: .default) { _ in self.openPicker(.photoLibrary) })
         sheet.addAction(.init(title: "İmtina", style: .cancel))
         present(sheet, animated: true)
     }
@@ -287,8 +275,8 @@ final class DrugScanViewController: UIViewController {
           DispatchQueue.main.async {
             self?.showLoading(false)
             switch result {
-            case .success(let info):   self?.updateResult(info)
-            case .failure(let error):  self?.showAlert("Xəta", error.localizedDescription)
+            case .success(let info): self?.updateResult(info)
+            case .failure(let error):self?.showAlert("Xəta", error.localizedDescription)
             }
           }
         }

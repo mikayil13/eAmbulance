@@ -21,13 +21,16 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     }()
     
     private let panelView: UIView = {
-        let view = UIView()
-        view.layer.masksToBounds = true
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 30
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        return view
+        let panelView = UIView()
+        panelView.backgroundColor = .systemBackground
+        panelView.layer.cornerRadius = 24
+        panelView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        panelView.layer.shadowColor = UIColor.black.cgColor
+        panelView.layer.shadowOpacity = 0.1
+        panelView.layer.shadowOffset = CGSize(width: 0, height: -4)
+        panelView.layer.shadowRadius = 12
+        panelView.translatesAutoresizingMaskIntoConstraints = false
+        return panelView
     }()
     
     private let panelHandle: UIView = {
@@ -66,35 +69,98 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         view.isHidden = true
         return view
     }()
-    
-    private let hospitalNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Xəstəxana Adı"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
+    private let topStatusView: UIView = {
+           let view = UIView()
+           view.backgroundColor = .systemRed
+           view.translatesAutoresizingMaskIntoConstraints = false
+           return view
+       }()
+       
+       private let topStatusLabel: UILabel = {
+           let label = UILabel()
+           label.text = "Təcili yardım yoldadır  •  4 dq"
+           label.textColor = .white
+           label.font = .boldSystemFont(ofSize: 16)
+           label.translatesAutoresizingMaskIntoConstraints = false
+           return label
+       }()
+       
+       private let hospitalNameLabel: UILabel = {
+           let label = UILabel()
+           label.text = "Medistyle Hospital"
+           label.font = .boldSystemFont(ofSize: 18)
+           label.textColor = .black
+           label.translatesAutoresizingMaskIntoConstraints = false
+           return label
+       }()
+       
+       private let statusContainer: UIView = {
+           let view = UIView()
+           view.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 255/255, alpha: 1)
+           view.layer.cornerRadius = 12
+           view.translatesAutoresizingMaskIntoConstraints = false
+           return view
+       }()
+       
+       private let statusTitleLabel: UILabel = {
+           let label = UILabel()
+           label.text = "Təcili yardımın vəziyyəti"
+           label.font = .boldSystemFont(ofSize: 16)
+           label.textColor = .systemBlue
+           label.translatesAutoresizingMaskIntoConstraints = false
+           return label
+       }()
+       
+       private let etaLabel: UILabel = {
+           let label = UILabel()
+           label.text = "⏱️Təxmini çatma vaxtı: 12 dq"
+           label.font = .systemFont(ofSize: 14)
+           label.textColor = .darkGray
+           label.translatesAutoresizingMaskIntoConstraints = false
+           return label
+       }()
+       
+    private let progressView: UIProgressView = {
+        let progress = UIProgressView(progressViewStyle: .default)
+        progress.progressTintColor = .systemBlue
+        progress.trackTintColor = .lightGray
+        progress.progress = 0.0  // Başlanğıcda 0 olaraq təyin et
+        progress.translatesAutoresizingMaskIntoConstraints = false
+        return progress
     }()
-    
-    private let ambulanceCountdownLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 12)
-        label.textAlignment = .left
-        label.textColor = .systemGray
-        label.text = "Sizin ambulans artıq yola çıxıb. Bu müddət ərzində ilkin tibbi yardımı süni intellekt vasitəsilə əldə edə bilərsiniz."
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    let ambulanceStatusLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Tecili Tibbi yardim yoldadir"
-        label.textColor = .systemRed
-        label.font = UIFont.boldSystemFont(ofSize: 13)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.alpha = 1.0
-        return label
-    }()
+       
+    private lazy var cancelButton: UIButton = {
+           let button = UIButton(type: .system)
+           button.setTitle("Gedişi ləğv et", for: .normal)
+           button.setTitleColor(.black, for: .normal)
+           button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+           button.tintColor = .black
+           button.translatesAutoresizingMaskIntoConstraints = false
+           button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+           button.contentHorizontalAlignment = .left
+           return button
+       }()
+       
+       private let warningLabel: UILabel = {
+           let label = UILabel()
+           label.text = "⚠️Sui-istifadə halında məsuliyyətə cəlb olunacağınızı nəzərə alın."
+           label.font = .systemFont(ofSize: 12)
+           label.textColor = .systemOrange
+           label.numberOfLines = 0
+           label.translatesAutoresizingMaskIntoConstraints = false
+           return label
+       }()
+       
+       private let chatButton: UIButton = {
+           let button = UIButton(type: .system)
+           button.setImage(UIImage(systemName: "message.fill"), for: .normal)
+           button.backgroundColor = .systemGreen
+           button.tintColor = .white
+           button.layer.cornerRadius = 24
+           button.translatesAutoresizingMaskIntoConstraints = false
+           return button
+       }()
+  
     private let overlayView: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.black.withAlphaComponent(0.4)
@@ -144,19 +210,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
-    private var topPanelHeight: CGFloat { viewModel.expandedHeight - viewModel.halfExpandedHeight }
-    private lazy var cancelAmbulanceButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Ləğv et", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemRed
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     private let ambulanceStatusStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -183,7 +236,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     private var panelHeightConstraint: NSLayoutConstraint!
     private var searchOverlayView: UIView?
     var coordinator: HospitalMapCoordinator?
-
+    private var topPanelHeight: CGFloat { viewModel.expandedHeight - viewModel.halfExpandedHeight }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -191,6 +244,14 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         setupLocationManager()
         addPanGesture()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+       
+        viewModel.onUpdate = { [weak self] progress, minutes in
+                  DispatchQueue.main.async {
+                      self?.progressView.progress = progress
+                      self?.etaLabel.text = "⏱️Təxmini çatma vaxtı: \(minutes) dq"
+                      self?.topStatusLabel.text = "Təcili yardım yoldadır • \(minutes) dq"
+                  }
+              }
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.updateAmbulance()
@@ -208,97 +269,159 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     }
     private func setupUI() {
         view.backgroundColor = .white
+
+        // Delegat & DataSource
         mapView.delegate = self
         searchBar.delegate = self
         tableView.delegate = self
-        coachMarksController.dataSource = self
         tableView.dataSource = self
+        coachMarksController.dataSource = self
+
+        // 1) Əsas subview-lər
         view.addSubview(mapView)
         view.addSubview(overlayView)
         view.addSubview(panelView)
         view.addSubview(topPanelView)
         view.addSubview(sosButton)
-        topPanelView.addSubview(panelLabel)
-        topPanelView.addSubview(closeButton)
-        topPanelView.addSubview(searchBar)
-        panelView.addSubview(panelHandle)
+
+        // 2) panelView içərisi
         panelView.addSubview(destinationButton)
         panelView.addSubview(tableView)
         panelView.addSubview(hospitalListContainer)
         panelView.addSubview(ambulanceStatusContainer)
-        ambulanceStatusContainer.addSubview(ambulanceStatusStack)
-        ambulanceStatusStack.addArrangedSubview(hospitalNameLabel)
-        ambulanceStatusStack.addArrangedSubview(ambulanceCountdownLabel)
-        ambulanceStatusContainer.addSubview(ambulanceStatusLabel)
-        ambulanceStatusContainer.addSubview(cancelAmbulanceButton)
+
+        // 3) Ambulans status elementləri yalnız ambulanceStatusContainer daxilində
+        ambulanceStatusContainer.addSubview(topStatusView)
+        topStatusView.addSubview(topStatusLabel)
+
+        ambulanceStatusContainer.addSubview(hospitalNameLabel)
+
+        ambulanceStatusContainer.addSubview(statusContainer)
+        statusContainer.addSubview(statusTitleLabel)
+        statusContainer.addSubview(etaLabel)
+        statusContainer.addSubview(progressView)
+
+        ambulanceStatusContainer.addSubview(cancelButton)
+        ambulanceStatusContainer.addSubview(warningLabel)
+        ambulanceStatusContainer.addSubview(chatButton)
+
+        // 4) Search panel
+        topPanelView.addSubview(panelLabel)
+        topPanelView.addSubview(closeButton)
+        topPanelView.addSubview(searchBar)
+
+        // 5) Constraint hazırlığı
         panelHeightConstraint = panelView.heightAnchor.constraint(equalToConstant: viewModel.halfExpandedHeight)
         topPanelTopConstraint = topPanelView.topAnchor.constraint(equalTo: view.topAnchor, constant: -topPanelHeight)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(startSOSCoachMark), name: Notification.Name("ShowSOSCoachMark"), object: nil)
-        
+
+        // 6) Auto Layout
         NSLayoutConstraint.activate([
+            // mapView
             mapView.topAnchor.constraint(equalTo: view.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: panelView.topAnchor),
+
+            // overlayView
             overlayView.topAnchor.constraint(equalTo: view.topAnchor),
             overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             overlayView.bottomAnchor.constraint(equalTo: panelView.topAnchor),
-            topPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topPanelView.heightAnchor.constraint(equalToConstant: 160),
-            topPanelTopConstraint,
-            panelLabel.centerXAnchor.constraint(equalTo: topPanelView.centerXAnchor),
-            panelLabel.topAnchor.constraint(equalTo: topPanelView.topAnchor, constant: 63),
-            searchBar.leadingAnchor.constraint(equalTo: topPanelView.leadingAnchor, constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: topPanelView.trailingAnchor, constant: -16),
-            searchBar.topAnchor.constraint(equalTo: panelLabel.bottomAnchor, constant: 12),
-            searchBar.heightAnchor.constraint(equalToConstant: 50),
-            closeButton.trailingAnchor.constraint(equalTo: topPanelView.trailingAnchor, constant: -16),
-            closeButton.centerYAnchor.constraint(equalTo: panelLabel.centerYAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 25),
-            closeButton.heightAnchor.constraint(equalToConstant: 25),
+
+            // panelView
             panelView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             panelView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             panelView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             panelHeightConstraint,
-            panelHandle.topAnchor.constraint(equalTo: panelView.topAnchor, constant: 8),
-            panelHandle.centerXAnchor.constraint(equalTo: panelView.centerXAnchor),
-            panelHandle.widthAnchor.constraint(equalToConstant: 40),
-            panelHandle.heightAnchor.constraint(equalToConstant: 5),
+
+            // destinationButton & tableView
             destinationButton.topAnchor.constraint(equalTo: panelView.topAnchor, constant: 20),
             destinationButton.leadingAnchor.constraint(equalTo: panelView.leadingAnchor, constant: 10),
             destinationButton.trailingAnchor.constraint(equalTo: panelView.trailingAnchor, constant: -10),
             destinationButton.heightAnchor.constraint(equalToConstant: 50),
+
             tableView.topAnchor.constraint(equalTo: destinationButton.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: panelView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: panelView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: panelView.bottomAnchor),
-            sosButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-            sosButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
-            sosButton.widthAnchor.constraint(equalToConstant: 80),
-            sosButton.heightAnchor.constraint(equalToConstant: 80),
-            ambulanceStatusContainer.topAnchor.constraint(equalTo: hospitalListContainer.topAnchor),
+
+            // ambulanceStatusContainer — **sırf** panelView-ə bağlanır
+            ambulanceStatusContainer.topAnchor.constraint(equalTo: panelView.topAnchor),
             ambulanceStatusContainer.leadingAnchor.constraint(equalTo: panelView.leadingAnchor),
             ambulanceStatusContainer.trailingAnchor.constraint(equalTo: panelView.trailingAnchor),
             ambulanceStatusContainer.bottomAnchor.constraint(equalTo: panelView.bottomAnchor),
-            ambulanceStatusStack.topAnchor.constraint(equalTo: ambulanceStatusContainer.topAnchor, constant: 20),
-            ambulanceStatusStack.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 20),
-            ambulanceStatusStack.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -20),
-            ambulanceStatusLabel.topAnchor.constraint(equalTo: ambulanceStatusContainer.topAnchor, constant: 20),
-            ambulanceStatusLabel.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -20),
-            cancelAmbulanceButton.topAnchor.constraint(equalTo: ambulanceStatusStack.bottomAnchor, constant: 20),
-            cancelAmbulanceButton.centerXAnchor.constraint(equalTo: ambulanceStatusContainer.centerXAnchor),
-            cancelAmbulanceButton.widthAnchor.constraint(equalToConstant: 150),
-            cancelAmbulanceButton.heightAnchor.constraint(equalToConstant: 50)
+
+            // topStatusView
+            topStatusView.topAnchor.constraint(equalTo: ambulanceStatusContainer.topAnchor),
+            topStatusView.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor),
+            topStatusView.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor),
+            topStatusView.heightAnchor.constraint(equalToConstant: 40),
+
+            topStatusLabel.centerXAnchor.constraint(equalTo: topStatusView.centerXAnchor),
+            topStatusLabel.centerYAnchor.constraint(equalTo: topStatusView.centerYAnchor),
+
+            // hospitalNameLabel
+            hospitalNameLabel.topAnchor.constraint(equalTo: topStatusView.bottomAnchor, constant: 12),
+            hospitalNameLabel.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
+
+            // statusContainer
+            statusContainer.topAnchor.constraint(equalTo: hospitalNameLabel.bottomAnchor, constant: 12),
+            statusContainer.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
+            statusContainer.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -16),
+            statusContainer.heightAnchor.constraint(equalToConstant: 100),
+
+            statusTitleLabel.topAnchor.constraint(equalTo: statusContainer.topAnchor, constant: 12),
+            statusTitleLabel.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
+            etaLabel.topAnchor.constraint(equalTo: statusTitleLabel.bottomAnchor, constant: 4),
+            etaLabel.leadingAnchor.constraint(equalTo: statusTitleLabel.leadingAnchor),
+            progressView.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor, constant: 12),
+            progressView.trailingAnchor.constraint(equalTo: statusContainer.trailingAnchor, constant: -12),
+            progressView.bottomAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: -12),
+
+            // cancelButton & warningLabel
+            cancelButton.topAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: 16),
+            cancelButton.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
+
+            warningLabel.topAnchor.constraint(equalTo: cancelButton.bottomAnchor, constant: 8),
+            warningLabel.leadingAnchor.constraint(equalTo: cancelButton.leadingAnchor),
+            warningLabel.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -16),
+
+            // chatButton
+            chatButton.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -20),
+            chatButton.bottomAnchor.constraint(equalTo: ambulanceStatusContainer.bottomAnchor, constant: -20),
+            chatButton.widthAnchor.constraint(equalToConstant: 48),
+            chatButton.heightAnchor.constraint(equalToConstant: 48),
+
+            // topPanelView (search UI)
+            topPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topPanelView.heightAnchor.constraint(equalToConstant: 160),
+            topPanelTopConstraint,
+            panelLabel.topAnchor.constraint(equalTo: topPanelView.topAnchor, constant: 63),
+            panelLabel.centerXAnchor.constraint(equalTo: topPanelView.centerXAnchor),
+            searchBar.topAnchor.constraint(equalTo: panelLabel.bottomAnchor, constant: 12),
+            searchBar.leadingAnchor.constraint(equalTo: topPanelView.leadingAnchor, constant: 16),
+            searchBar.trailingAnchor.constraint(equalTo: topPanelView.trailingAnchor, constant: -16),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            closeButton.centerYAnchor.constraint(equalTo: panelLabel.centerYAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: topPanelView.trailingAnchor, constant: -16),
+            closeButton.widthAnchor.constraint(equalToConstant: 25),
+            closeButton.heightAnchor.constraint(equalToConstant: 25),
+
+            // sosButton
+            sosButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            sosButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            sosButton.widthAnchor.constraint(equalToConstant: 80),
+            sosButton.heightAnchor.constraint(equalToConstant: 80),
         ])
-        [hospitalListContainer, ambulanceStatusContainer].forEach { container in
-            container.topAnchor.constraint(equalTo: panelView.topAnchor).isActive = true
-            container.bottomAnchor.constraint(equalTo: panelView.bottomAnchor).isActive = true
-            container.leadingAnchor.constraint(equalTo: panelView.leadingAnchor).isActive = true
-            container.trailingAnchor.constraint(equalTo: panelView.trailingAnchor).isActive = true
-        }
+
+        // CoachMark notification
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(startSOSCoachMark),
+                                               name: Notification.Name("ShowSOSCoachMark"),
+                                               object: nil)
+
+        // Z-order
         view.bringSubviewToFront(sosButton)
         view.bringSubviewToFront(panelView)
         view.bringSubviewToFront(topPanelView)
@@ -319,7 +442,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     @objc private func closeButtonTapped() {
         collapsePanels()
     }
-    
     @objc func showSOSCoachMark() {
         sosButton.isHidden = true
         DispatchQueue.main.async {
@@ -354,15 +476,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     
     @objc private func destinationTapped() {
         expandPanels()
-    }
-    
-    func startFlashingTextAnimation() {
-        UIView.animate(withDuration: 0.8,
-                       delay: 0,
-                       options: [.repeat, .autoreverse],
-                       animations: {
-            self.ambulanceStatusLabel.alpha = 0.2
-        }, completion: nil)
     }
     
     private func setupLocationManager() {
@@ -443,7 +556,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         hospitalListContainer.isHidden = true
         hospitalNameLabel.text = hospital.name
         ambulanceStatusContainer.isHidden = false
-        startFlashingTextAnimation()
         viewModel.hasUserRequestedAmbulance = true
         startAmbulanceAnimation()
     }
@@ -635,25 +747,30 @@ extension HospitalMapController: UISearchBarDelegate {
 extension HospitalMapController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
           guard scrollView == tableView else { return }
+          if viewModel.hasUserRequestedAmbulance { return }
           let offsetY = scrollView.contentOffset.y
           if offsetY > 10 && !viewModel.isPanelExpanded {
               expandPanels()
           }
       }
-}
+  }
 // MARK: - Panel Handling (Gesture & Animations)
 extension HospitalMapController {
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
-        gesture.setTranslation(.zero, in: view)
-
+        if viewModel.hasUserRequestedAmbulance && translation.y < 0 {
+            gesture.setTranslation(.zero, in: view)
+            return
+        }
         switch gesture.state {
         case .changed:
             let rawHeight = panelHeightConstraint.constant - translation.y
-            panelHeightConstraint.constant = max(viewModel.halfExpandedHeight,
-                                                 min(viewModel.expandedHeight, rawHeight))
+            panelHeightConstraint.constant = max(
+                viewModel.halfExpandedHeight,
+                min(viewModel.expandedHeight, rawHeight)
+            )
             let progress = (panelHeightConstraint.constant - viewModel.halfExpandedHeight)
-            / (viewModel.expandedHeight - viewModel.halfExpandedHeight)
+                / (viewModel.expandedHeight - viewModel.halfExpandedHeight)
             topPanelTopConstraint.constant = -topPanelHeight + topPanelHeight * progress
             overlayView.alpha = progress
             view.layoutIfNeeded()
@@ -665,18 +782,22 @@ extension HospitalMapController {
                 expandPanels()
             } else {
                 let threshold = viewModel.halfExpandedHeight +
-                (viewModel.expandedHeight - viewModel.halfExpandedHeight) * 0.3
+                    (viewModel.expandedHeight - viewModel.halfExpandedHeight) * 0.3
                 panelHeightConstraint.constant < threshold
                     ? collapsePanels()
                     : expandPanels()
             }
-        default:
-            break
+        default: break
         }
     }
+
     private func expandPanels() {
+        guard viewModel.hasUserRequestedAmbulance == false else { return }
         viewModel.isPanelExpanded = true
-        UIView.animate(withDuration: 0.5,delay: 0,usingSpringWithDamping: 0.8,initialSpringVelocity: 0.5,
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.5,
                        options: .allowUserInteraction) {
             self.panelHeightConstraint.constant = self.viewModel.expandedHeight
             self.topPanelTopConstraint.constant = 0
@@ -686,6 +807,7 @@ extension HospitalMapController {
             self.view.layoutIfNeeded()
         }
     }
+
 
     @objc  func collapsePanels() {
         viewModel.isPanelExpanded = false
