@@ -264,6 +264,58 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ambulans ləğv edilir"
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textAlignment = .center
+        label.textColor = .black
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    // 3. Subtitle Label
+    let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Zəhmət olmasa gözləyin..."
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textAlignment = .center
+        label.textColor = .darkGray
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    // 4. Card View
+    let cancelCardView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        view.layer.cornerRadius = 12
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 6
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    let cancelStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 10
+        stack.alignment = .center
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+        let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
+
+
     
     let viewModel = HospitalMapViewModel()
     let coachMarksController = CoachMarksController()
@@ -355,7 +407,16 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         // 5) Constraint hazırlığı
         panelHeightConstraint = panelView.heightAnchor.constraint(equalToConstant: viewModel.halfExpandedHeight)
         topPanelTopConstraint = topPanelView.topAnchor.constraint(equalTo: view.topAnchor, constant: -topPanelHeight)
-        
+        cancelStack.addArrangedSubview(titleLabel)
+        cancelStack.addArrangedSubview(subtitleLabel)
+        cancelStack.addArrangedSubview(spinner)
+
+        cancelCardView.addSubview(cancelStack)
+
+        // 7. Add to main view and set constraints
+        view.addSubview(cancelCardView)
+
+
         // 6) Auto Layout
         NSLayoutConstraint.activate([
             // mapView
@@ -467,6 +528,13 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             sosButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
             sosButton.widthAnchor.constraint(equalToConstant: 80),
             sosButton.heightAnchor.constraint(equalToConstant: 80),
+            cancelCardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+              cancelCardView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+              cancelCardView.widthAnchor.constraint(equalToConstant: 225),
+              cancelCardView.heightAnchor.constraint(equalToConstant: 130),
+
+              cancelStack.centerXAnchor.constraint(equalTo: cancelCardView.centerXAnchor),
+              cancelStack.centerYAnchor.constraint(equalTo: cancelCardView.centerYAnchor)
         ])
         
         // CoachMark notification
@@ -570,48 +638,73 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         viewModel.ambulanceAnnotationView?.transform = .identity
     }
     func showCancelAmbulanceAlert(onConfirm: @escaping (String?) -> Void) {
-        let alert = UIAlertController(
-            title: "Ambulansı ləğv etmək istəyirsiniz?",
-            message: "Əgər ləğv etmək istəyirsinizsə, səbəbini qeyd edin.",
-            preferredStyle: .alert
-        )
-        alert.addTextField { textField in
-            textField.placeholder = "Səbəbi buraya yazın..."
-        }
-        alert.addAction(UIAlertAction(title: "İmtina", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Ləğv et", style: .destructive, handler: { _ in
-            let reason = alert.textFields?.first?.text
-            onConfirm(reason)
-        }))
-        present(alert, animated: true, completion: nil)
-    }
+           let alert = UIAlertController(
+               title: "Ambulansı ləğv etmək istəyirsiniz?",
+               message: "Əgər ləğv etmək istəyirsinizsə, səbəbini qeyd edin.",
+               preferredStyle: .alert
+           )
+           alert.addTextField { textField in
+               textField.placeholder = "Səbəbi buraya yazın..."
+           }
+           alert.addAction(UIAlertAction(title: "İmtina", style: .cancel, handler: nil))
+           alert.addAction(UIAlertAction(title: "Ləğv et", style: .destructive, handler: { _ in
+               let reason = alert.textFields?.first?.text
+               onConfirm(reason)
+           }))
+           present(alert, animated: true, completion: nil)
+       }
+
     @objc func cancelButtonTapped() {
         showCancelAmbulanceAlert { [weak self] reason in
             guard let self = self else { return }
-            self.viewModel.animationTimer?.invalidate()
-            self.viewModel.animationTimer = nil
-            self.viewModel.resetAmbulanceAnimation()
-            if let ambulanceAnnotation = self.viewModel.ambulanceAnnotation {
-                self.mapView.removeAnnotation(ambulanceAnnotation)
-                self.viewModel.ambulanceAnnotation = nil
+
+            // 1. Spiner və mesaj görünür
+            self.cancelCardView.isHidden = false
+            self.spinner.startAnimating()
+            self.spinner.isHidden = false
+            self.titleLabel.isHidden = false
+           self.subtitleLabel.isHidden = false
+
+
+            // 2. 1-2 saniyəlik süni gecikmə (spiner görünsün deyə)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                // 3. Əməliyyatlar yerinə yetirilir
+                self.viewModel.animationTimer?.invalidate()
+                self.viewModel.animationTimer = nil
+                self.viewModel.resetAmbulanceAnimation()
+
+                if let ambulanceAnnotation = self.viewModel.ambulanceAnnotation {
+                    self.mapView.removeAnnotation(ambulanceAnnotation)
+                    self.viewModel.ambulanceAnnotation = nil
+                }
+
+                self.removeRoute()
+                self.viewModel.hasUserRequestedAmbulance = false
+                self.viewModel.selectedHospital = nil
+                self.viewModel.hospitalLocation = nil
+
+                self.destinationButton.isHidden = false
+                self.tableView.isHidden = false
+                self.hospitalListContainer.isHidden = false
+                self.ambulanceStatusContainer.isHidden = true
+                self.mapView.isUserInteractionEnabled = true
+                self.collapsePanels()
+                self.sosButton.isHidden = false
+                self.addHospitalAnnotations()
+                self.tabBarController?.tabBar.isHidden = false
+
+                // 4. Spiner və mesaj gizlədilir
+                self.spinner.stopAnimating()
+                self.spinner.isHidden = true
+                self.titleLabel.isHidden = true
+                self.subtitleLabel.isHidden = true
+                self.cancelCardView.isHidden = true
+
+                print("İstifadəçi səbəb daxil etdi: \(reason ?? "yoxdur")")
             }
-            self.removeRoute()
-            self.viewModel.hasUserRequestedAmbulance = false
-            self.viewModel.selectedHospital = nil
-            self.viewModel.hospitalLocation = nil
-            self.destinationButton.isHidden = false
-            self.tableView.isHidden = false
-            self.hospitalListContainer.isHidden = false
-            self.ambulanceStatusContainer.isHidden = true
-            self.mapView.isUserInteractionEnabled = true
-            self.collapsePanels()
-            self.sosButton.isHidden = false
-            self.addHospitalAnnotations()
-            self.tabBarController?.tabBar.isHidden = false
-            // 9. İstifadəçinin qeyd etdiyi səbəbi çap et
-            print("İstifadəçi səbəb daxil etdi: \(reason ?? "yoxdur")")
         }
     }
+
   
     @objc func updateAmbulance() {
         guard let newCoord = viewModel.updateAmbulancePosition() else {
