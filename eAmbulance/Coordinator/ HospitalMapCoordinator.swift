@@ -46,6 +46,7 @@ class HospitalMapCoordinator: Coordinator {
         mapVC.hospitalListContainer.isHidden = true
         mapVC.destinationButton.isHidden = true
         mapVC.tableView.isHidden = true
+        mapVC.sosButton.isHidden = true
         mapVC.tabBarController?.tabBar.isHidden = true
         mapVC.collapsePanels()
         let detailVC = DetailController()
@@ -59,6 +60,7 @@ class HospitalMapCoordinator: Coordinator {
             if !ambulanceCalled {
                 DispatchQueue.main.async {
                     mapVC?.tableView.isHidden = false
+                    mapVC?.sosButton.isHidden = false
                     mapVC?.hospitalListContainer.isHidden = false
                     mapVC?.destinationButton.isHidden = false
                 }

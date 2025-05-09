@@ -12,22 +12,23 @@ class HospitalMapViewModel {
     var segmentStartTime: TimeInterval = 0
     var hasUserRequestedAmbulance = false
     var hospitalLocation: CLLocationCoordinate2D?
-     var currentRoute: MKPolyline?
+    var currentRoute: MKPolyline?
     var lastRotation: CGFloat = 0
     var ambulanceAnnotationView: MKAnnotationView?
     var animationTimer: Timer?
     var currentRegion: MKCoordinateRegion?
     var ambulanceAnnotation: MKPointAnnotation?
     var lastUserLocation: CLLocation?
-     var userAnnotation: MKPointAnnotation?
-     var isPanelExpanded = false
-     let halfExpandedHeight: CGFloat = UIScreen.main.bounds.height * 0.4
-     let expandedHeight: CGFloat = UIScreen.main.bounds.height * 0.9
-     let locationManager = CLLocationManager()
+    var userAnnotation: MKPointAnnotation?
+    var isPanelExpanded = false
+    let halfExpandedHeight: CGFloat = UIScreen.main.bounds.height * 0.4
+    let expandedHeight: CGFloat = UIScreen.main.bounds.height * 0.9
+    let locationManager = CLLocationManager()
     var totalAnimationDuration: TimeInterval = 10.0
     var segmentDuration: TimeInterval {
         totalAnimationDuration / TimeInterval(max(routeCoordinates.count - 1, 1))
     }
+    var hasArrived: Bool = false
     var onUpdate: ((Float, Int) -> Void)?
 
     func searchForHospitals(near location: CLLocation) {
@@ -91,49 +92,38 @@ class HospitalMapViewModel {
     var numberOfHospitals: Int {
         return filteredHospitals.count
     }
+   
     func updateAmbulancePosition() -> CLLocationCoordinate2D? {
+        guard hasUserRequestedAmbulance else { return nil }
         let now = CACurrentMediaTime()
         let elapsed = now - segmentStartTime
-
-        // Animasiya davam edirsə, heç bir şey etməyin
-       
-
-        // Proqresin hesablanması
+        if hasArrived {
+            return nil
+        }
         let totalRouteLength = routeCoordinates.count - 1
-        let progress = min(elapsed / segmentDuration, 1.0) // Proqresin max 1.0 olmasını təmin et
-
-        // Təxmini vaxtın hesablanması
+        let progress = min(elapsed / segmentDuration, 1.0)
         let remaining = totalAnimationDuration - (Double(currentSegmentIndex) * segmentDuration + elapsed)
         let remainingMinutes = max(1, Int(remaining / 60))
-
-        // Callback ilə hər iki məlumatı göndəririk
         onUpdate?(Float(Double(currentSegmentIndex) + progress) / Float(totalRouteLength), remainingMinutes)
-
         if elapsed >= segmentDuration {
             currentSegmentIndex += 1
             if currentSegmentIndex >= routeCoordinates.count - 1 {
                 resetAmbulanceAnimation()
+                hasArrived = true
                 return routeCoordinates.last
             }
             segmentStartTime = now
         }
-
         guard currentSegmentIndex + 1 < routeCoordinates.count else {
-            resetAmbulanceAnimation()
-            return routeCoordinates.last
+            return nil
         }
-
         let start = routeCoordinates[currentSegmentIndex]
         let end = routeCoordinates[currentSegmentIndex + 1]
         let t = min(elapsed / segmentDuration, 1.0)
-
         let lat = start.latitude + (end.latitude - start.latitude) * t
         let lon = start.longitude + (end.longitude - start.longitude) * t
-
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
-
-
     func resetAmbulanceAnimation() {
         currentSegmentIndex = 0
         segmentStartTime = CACurrentMediaTime()
@@ -183,14 +173,8 @@ class HospitalMapViewModel {
     }
     func cancelAmbulanceRequest(currentLocation: CLLocationCoordinate2D, hospitalLocation: CLLocationCoordinate2D) {
         hasUserRequestedAmbulance = false
-        
-        // Yeni marşrut təyin edilir: Ambulanın indiki mövqeyi ilə xəstəxana arasındakı yol
         routeCoordinates = [currentLocation, hospitalLocation]
-        
-        // Animasiya müddəti təyin edilir
-        totalAnimationDuration = 3.0 // qısa animasiya
-        
-        // Animasiya sıfırlanır
+        totalAnimationDuration = 3.0
         resetAmbulanceAnimation()
     }
 }
