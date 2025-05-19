@@ -2,7 +2,6 @@ import UIKit
 import MapKit
 import CoreLocation
 import Instructions
-
 class HospitalMapController: UIViewController, MKMapViewDelegate {
     private let mapView: MKMapView = {
         let map = MKMapView()
@@ -188,15 +187,22 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         return label
     }()
     
-    private let chatButton: UIButton = {
+    public  lazy var helpButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "message.fill"), for: .normal)
-        button.backgroundColor = .systemGreen
+        button.setTitle("Yardım", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.backgroundColor = UIColor(red: 0.22, green: 0.78, blue: 0.35, alpha: 1.0) // Yaşıl rəng
+        button.layer.cornerRadius = 20
+        button.setImage(UIImage(systemName: "questionmark.circle.fill"), for: .normal)
         button.tintColor = .white
-        button.layer.cornerRadius = 24
+        button.addTarget(self, action: #selector(helpButtonTapped), for: .touchUpInside)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+
     
     private let overlayView: UIView = {
         let v = UIView()
@@ -365,6 +371,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         coachMarksController.dataSource = self
+        helpButton.isHidden = true
         
         // 1) Əsas subview-lər
         view.addSubview(mapView)
@@ -372,7 +379,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         view.addSubview(panelView)
         view.addSubview(topPanelView)
         view.addSubview(sosButton)
-        
+        view.addSubview(helpButton)
         // 2) panelView içərisi
         panelView.addSubview(destinationButton)
         panelView.addSubview(tableView)
@@ -394,10 +401,9 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         statusContainer.addSubview(etaLabel)
         statusContainer.addSubview(progressView)
         statusContainer.addSubview(statusLabelsStack)
-        
-        ambulanceStatusContainer.addSubview(cancelButton)
         ambulanceStatusContainer.addSubview(warningLabel)
-        ambulanceStatusContainer.addSubview(chatButton)
+        ambulanceStatusContainer.addSubview(cancelButton)
+      
         
         // 4) Search panel
         topPanelView.addSubview(panelLabel)
@@ -494,20 +500,13 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             statusLabelsStack.bottomAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: -12),
             
             // cancelButton & warningLabel
-            cancelButton.topAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: 16),
-            cancelButton.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
-            
-            warningLabel.topAnchor.constraint(equalTo: cancelButton.bottomAnchor, constant: 8),
-            warningLabel.leadingAnchor.constraint(equalTo: cancelButton.leadingAnchor),
+            warningLabel.topAnchor.constraint(equalTo: statusContainer.bottomAnchor, constant: 16),
+            warningLabel.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
             warningLabel.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -16),
-            
-            // chatButton
-            chatButton.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -20),
-            chatButton.bottomAnchor.constraint(equalTo: ambulanceStatusContainer.bottomAnchor, constant: -20),
-            chatButton.widthAnchor.constraint(equalToConstant: 48),
-            chatButton.heightAnchor.constraint(equalToConstant: 48),
-            
-            // topPanelView (search UI)
+            cancelButton.topAnchor.constraint(equalTo: warningLabel.bottomAnchor, constant: 4),
+            cancelButton.leadingAnchor.constraint(equalTo: statusContainer.leadingAnchor),
+            cancelButton.trailingAnchor.constraint(equalTo: statusContainer.trailingAnchor),
+            cancelButton.heightAnchor.constraint(equalToConstant: 64),
             topPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topPanelView.heightAnchor.constraint(equalToConstant: 160),
@@ -522,27 +521,22 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             closeButton.trailingAnchor.constraint(equalTo: topPanelView.trailingAnchor, constant: -16),
             closeButton.widthAnchor.constraint(equalToConstant: 25),
             closeButton.heightAnchor.constraint(equalToConstant: 25),
-            
-            // sosButton
             sosButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             sosButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
             sosButton.widthAnchor.constraint(equalToConstant: 80),
             sosButton.heightAnchor.constraint(equalToConstant: 80),
             cancelCardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-              cancelCardView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-              cancelCardView.widthAnchor.constraint(equalToConstant: 225),
-              cancelCardView.heightAnchor.constraint(equalToConstant: 130),
-
-              cancelStack.centerXAnchor.constraint(equalTo: cancelCardView.centerXAnchor),
-              cancelStack.centerYAnchor.constraint(equalTo: cancelCardView.centerYAnchor)
+            cancelCardView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            cancelCardView.widthAnchor.constraint(equalToConstant: 225),
+            cancelCardView.heightAnchor.constraint(equalToConstant: 130),
+            cancelStack.centerXAnchor.constraint(equalTo: cancelCardView.centerXAnchor),
+            cancelStack.centerYAnchor.constraint(equalTo: cancelCardView.centerYAnchor),
+            helpButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            helpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
-        
-        // CoachMark notification
         NotificationCenter.default.addObserver(self,selector: #selector(startSOSCoachMark),
                                                name: Notification.Name("ShowSOSCoachMark"),
                                                object: nil)
-        
-        // Z-order
         view.bringSubviewToFront(sosButton)
         view.bringSubviewToFront(panelView)
         view.bringSubviewToFront(topPanelView)
@@ -551,7 +545,8 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         panelView.bringSubviewToFront(panelHandle)
         panelView.bringSubviewToFront(destinationButton)
         panelView.bringSubviewToFront(tableView)
-    }
+    
+}
     func authenticateUser() {
         faceIDController.authenticateUser(success: {
             self.sosButtonTapped()
@@ -613,7 +608,9 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         }
         animator.startAnimation()
     }
-    
+    @objc func helpButtonTapped() {
+        // Yardım səhifəsinə yönləndir və ya popup aç
+    }
     @objc func startAmbulanceAnimation() {
         guard viewModel.routeCoordinates.count > 1 else {
             print("Route koordinatları boşdur!")
@@ -685,6 +682,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
 
                 self.destinationButton.isHidden = false
                 self.tableView.isHidden = false
+                self.helpButton.isHidden = true
                 self.hospitalListContainer.isHidden = false
                 self.ambulanceStatusContainer.isHidden = true
                 self.mapView.isUserInteractionEnabled = true
@@ -730,7 +728,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             }
         }
     }
-    
     func startAmbulanceRequest(for hospital: HospitalModel) {
         hospitalListContainer.isHidden = true
         hospitalNameLabel.text = hospital.name
@@ -744,6 +741,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         destinationButton.isHidden = true
         tabBarController?.tabBar.isHidden = true
         tableView.isHidden = true
+        helpButton.isHidden = false
         print("SOS düyməsi basıldı")
         guard let userCoordinate = mapView.userLocation.location?.coordinate else { return }
         guard viewModel.selectedHospital == nil else {
