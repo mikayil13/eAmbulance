@@ -167,11 +167,9 @@ class OtpVc: UIViewController {
                     self?.highlightCodeFieldsWithError(false)
                     
                     // HospitalMapController-a keçid edin
-                    let hospitalVC = HospitalMapController()
-                    let navController = UINavigationController(rootViewController: hospitalVC)
-                    navController.modalPresentationStyle = .fullScreen
-                    self?.present(navController, animated: true, completion: nil)
-
+                    let tabBarController = TabBarContoller()
+                    tabBarController.modalPresentationStyle = .fullScreen
+                    self?.present(tabBarController, animated: true)
                 }
             }
         }

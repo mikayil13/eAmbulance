@@ -16,7 +16,7 @@ class PhoneNumberVc: UIViewController {
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hesaba daxil olmaq üçün və ya qeydiyyat üçün\nnömrənizi daxil edin"
+        label.text = "Hesaba daxil olmaq  və ya qeydiyyat üçün\nnömrənizi daxil edin"
         label.font = .systemFont(ofSize: 14)
         label.textAlignment = .center
         label.textColor = UIColor(red: 108/255, green: 103/255, blue: 103/255, alpha: 1)
@@ -61,6 +61,7 @@ class PhoneNumberVc: UIViewController {
         view.backgroundColor = .white
         setupLayout()
         phoneTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        navigationItem.hidesBackButton = true
     }
 
     // MARK: - Layout
@@ -125,7 +126,8 @@ class PhoneNumberVc: UIViewController {
 
                 let otpVC = OtpVc()
                 otpVC.verificationID = verificationID
-                self.navigationController?.pushViewController(otpVC, animated: true)
+                self.navigationController?.pushViewController(otpVC, animated: true) 
+
             }
         }
     }

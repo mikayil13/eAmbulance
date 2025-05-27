@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>HUGGINGFACE_API_KEY</key>
-	<string>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</string>
+	<string>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</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -34,6 +34,16 @@
 			</array>
 		</dict>
 	</dict>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>app-1-674503718829-ios-ecbb4d755de95681da5324</string>
+            </array>
+        </dict>
+    </array>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Bu tətbiq xəritədə yerinizi göstərmək üçün yer məlumatına ehtiyac duyur.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

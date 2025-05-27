@@ -280,8 +280,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
-    // 3. Subtitle Label
+    
     let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Zəhmət olmasa gözləyin..."
@@ -293,7 +292,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         return label
     }()
 
-    // 4. Card View
     let cancelCardView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
@@ -320,8 +318,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
-
-
     
     let viewModel = HospitalMapViewModel()
     let coachMarksController = CoachMarksController()
@@ -338,8 +334,11 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         setupUI()
         setupLocationManager()
         addPanGesture()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.coachMarksController.start(in: .window(over: self))
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(showSOSCoachMark), name: Notification.Name("ShowSOSCoachMark"), object: nil)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
         viewModel.onUpdate = { [weak self] progress, minutes in
             DispatchQueue.main.async {
                 self?.progressView.progress = progress
@@ -358,22 +357,15 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         authenticateUser()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.coachMarksController.start(in: .window(over: self))
-        }
     }
     private func setupUI() {
         view.backgroundColor = .white
-        
-        // Delegat & DataSource
         mapView.delegate = self
         searchBar.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         coachMarksController.dataSource = self
         helpButton.isHidden = true
-        
-        // 1) Əsas subview-lər
         view.addSubview(mapView)
         view.addSubview(overlayView)
         view.addSubview(panelView)
@@ -385,13 +377,10 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         panelView.addSubview(tableView)
         panelView.addSubview(hospitalListContainer)
         panelView.addSubview(ambulanceStatusContainer)
-        
         // 3) Ambulans status elementləri yalnız ambulanceStatusContainer daxilində
         ambulanceStatusContainer.addSubview(topStatusView)
         topStatusView.addSubview(topStatusLabel)
-        
         ambulanceStatusContainer.addSubview(hospitalNameLabel)
-        
         ambulanceStatusContainer.addSubview(statusContainer)
         statusContainer.addSubview(statusTitleLabel)
         statusContainer.addSubview(etaLabel)
@@ -403,26 +392,19 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         statusContainer.addSubview(statusLabelsStack)
         ambulanceStatusContainer.addSubview(warningLabel)
         ambulanceStatusContainer.addSubview(cancelButton)
-      
-        
         // 4) Search panel
         topPanelView.addSubview(panelLabel)
         topPanelView.addSubview(closeButton)
         topPanelView.addSubview(searchBar)
-        
         // 5) Constraint hazırlığı
         panelHeightConstraint = panelView.heightAnchor.constraint(equalToConstant: viewModel.halfExpandedHeight)
         topPanelTopConstraint = topPanelView.topAnchor.constraint(equalTo: view.topAnchor, constant: -topPanelHeight)
         cancelStack.addArrangedSubview(titleLabel)
         cancelStack.addArrangedSubview(subtitleLabel)
         cancelStack.addArrangedSubview(spinner)
-
         cancelCardView.addSubview(cancelStack)
-
         // 7. Add to main view and set constraints
         view.addSubview(cancelCardView)
-
-
         // 6) Auto Layout
         NSLayoutConstraint.activate([
             // mapView
@@ -430,19 +412,16 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: panelView.topAnchor),
-            
             // overlayView
             overlayView.topAnchor.constraint(equalTo: view.topAnchor),
             overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             overlayView.bottomAnchor.constraint(equalTo: panelView.topAnchor),
-            
             // panelView
             panelView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             panelView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             panelView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             panelHeightConstraint,
-            
             // destinationButton & tableView
             destinationButton.topAnchor.constraint(equalTo: panelView.topAnchor, constant: 20),
             destinationButton.leadingAnchor.constraint(equalTo: panelView.leadingAnchor, constant: 10),
@@ -462,21 +441,14 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             ambulanceStatusContainer.leadingAnchor.constraint(equalTo: panelView.leadingAnchor),
             ambulanceStatusContainer.trailingAnchor.constraint(equalTo: panelView.trailingAnchor),
             ambulanceStatusContainer.bottomAnchor.constraint(equalTo: panelView.bottomAnchor),
-            
-            // topStatusView
             topStatusView.topAnchor.constraint(equalTo: ambulanceStatusContainer.topAnchor),
             topStatusView.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor),
             topStatusView.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor),
             topStatusView.heightAnchor.constraint(equalToConstant: 40),
-            
             topStatusLabel.centerXAnchor.constraint(equalTo: topStatusView.centerXAnchor),
             topStatusLabel.centerYAnchor.constraint(equalTo: topStatusView.centerYAnchor),
-            
-            // hospitalNameLabel
             hospitalNameLabel.topAnchor.constraint(equalTo: topStatusView.bottomAnchor, constant: 12),
             hospitalNameLabel.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
-            
-            // statusContainer
             statusContainer.topAnchor.constraint(equalTo: hospitalNameLabel.bottomAnchor, constant: 12),
             statusContainer.leadingAnchor.constraint(equalTo: ambulanceStatusContainer.leadingAnchor, constant: 16),
             statusContainer.trailingAnchor.constraint(equalTo: ambulanceStatusContainer.trailingAnchor, constant: -16),
@@ -534,9 +506,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             helpButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             helpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
-        NotificationCenter.default.addObserver(self,selector: #selector(startSOSCoachMark),
-                                               name: Notification.Name("ShowSOSCoachMark"),
-                                               object: nil)
+      
         view.bringSubviewToFront(sosButton)
         view.bringSubviewToFront(panelView)
         view.bringSubviewToFront(topPanelView)
@@ -559,16 +529,17 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         collapsePanels()
     }
     @objc func showSOSCoachMark() {
-        sosButton.isHidden = true
-        DispatchQueue.main.async {
+        sosButton.isHidden = false // Coach mark görünməsi üçün düymə gizlədilməməlidir
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.coachMarksController.start(in: .window(over: self))
         }
     }
-    
+
     @objc func startSOSCoachMark() {
-        sosButton.isHidden = true
+        sosButton.isHidden = false
         coachMarksController.start(in: .window(over: self))
     }
+
     
     func addHospitalAnnotations() {
         let existingHospitalAnnotations = mapView.annotations.filter { $0.title != "Ambulans" }
@@ -674,12 +645,10 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
                     self.mapView.removeAnnotation(ambulanceAnnotation)
                     self.viewModel.ambulanceAnnotation = nil
                 }
-
                 self.removeRoute()
                 self.viewModel.hasUserRequestedAmbulance = false
                 self.viewModel.selectedHospital = nil
                 self.viewModel.hospitalLocation = nil
-
                 self.destinationButton.isHidden = false
                 self.tableView.isHidden = false
                 self.helpButton.isHidden = true
@@ -690,20 +659,16 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
                 self.sosButton.isHidden = false
                 self.addHospitalAnnotations()
                 self.tabBarController?.tabBar.isHidden = false
-
-                // 4. Spiner və mesaj gizlədilir
                 self.spinner.stopAnimating()
                 self.spinner.isHidden = true
                 self.titleLabel.isHidden = true
                 self.subtitleLabel.isHidden = true
                 self.cancelCardView.isHidden = true
-
                 print("İstifadəçi səbəb daxil etdi: \(reason ?? "yoxdur")")
             }
         }
     }
-
-  
+    
     @objc func updateAmbulance() {
         guard let newCoord = viewModel.updateAmbulancePosition() else {
             if let last = viewModel.routeCoordinates.last {
