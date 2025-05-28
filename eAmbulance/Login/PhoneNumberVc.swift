@@ -2,7 +2,13 @@ import UIKit
 import FirebaseAuth
 
 class PhoneNumberVc: UIViewController {
-    // MARK: - UI Elements
+    private let topImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "logo") // Burada asset-ə yüklədiyin adla əvəz et
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         let baseFont = UIFont.boldSystemFont(ofSize: 24)
@@ -66,13 +72,18 @@ class PhoneNumberVc: UIViewController {
 
     // MARK: - Layout
     private func setupLayout() {
-        [titleLabel, subtitleLabel, phoneLabel, phoneTextField, confirmButton].forEach {
+        [topImageView, titleLabel, subtitleLabel, phoneLabel, phoneTextField, confirmButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            topImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            topImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            topImageView.widthAnchor.constraint(equalToConstant: 80),
+            topImageView.heightAnchor.constraint(equalToConstant: 80),
+
+            titleLabel.topAnchor.constraint(equalTo: topImageView.bottomAnchor, constant: 20),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),

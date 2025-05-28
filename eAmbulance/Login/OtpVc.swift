@@ -10,8 +10,6 @@ import FirebaseAuth
 
 class OtpVc: UIViewController {
     var verificationID: String?
-
-    // Timer properties
     private var timer: Timer?
     private var remainingSeconds: Int = 119
 
@@ -174,7 +172,6 @@ class OtpVc: UIViewController {
             }
         }
     }
-
 
     // MARK: - Timer Methods
     private func startTimer() {
