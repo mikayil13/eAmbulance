@@ -54,7 +54,7 @@ class AIViewController: UIViewController, UITextViewDelegate, AIViewModelDelegat
     private let sendButton: UIButton = {
         let button = UIButton(type: .system)
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 28, weight: .bold)
-        let image = UIImage(systemName: "paperplane.fill", withConfiguration: symbolConfig)
+        let image = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: symbolConfig)
         button.setImage(image, for: .normal)
         button.tintColor = .white
         button.backgroundColor = UIColor(red: 20/255, green: 109/255, blue: 191/255, alpha: 1)

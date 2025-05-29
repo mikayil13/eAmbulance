@@ -334,10 +334,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         setupUI()
         setupLocationManager()
         addPanGesture()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.coachMarksController.start(in: .window(over: self))
-        }
-        NotificationCenter.default.addObserver(self, selector: #selector(showSOSCoachMark), name: Notification.Name("ShowSOSCoachMark"), object: nil)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         viewModel.onUpdate = { [weak self] progress, minutes in
             DispatchQueue.main.async {
@@ -357,7 +353,10 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         authenticateUser()
+        NotificationCenter.default.addObserver(self, selector: #selector(showSOSCoachMark), name: Notification.Name("ShowSOSCoachMark"), object: nil)
+        showSOSCoachMark()
     }
+    
     private func setupUI() {
         view.backgroundColor = .white
         mapView.delegate = self
@@ -386,10 +385,6 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         statusContainer.addSubview(etaLabel)
         statusContainer.addSubview(statusLabelsStack)
         statusContainer.addSubview(progressView)
-        statusContainer.addSubview(statusTitleLabel)
-        statusContainer.addSubview(etaLabel)
-        statusContainer.addSubview(progressView)
-        statusContainer.addSubview(statusLabelsStack)
         ambulanceStatusContainer.addSubview(warningLabel)
         ambulanceStatusContainer.addSubview(cancelButton)
         // 4) Search panel
@@ -529,17 +524,31 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         collapsePanels()
     }
     @objc func showSOSCoachMark() {
-        sosButton.isHidden = false // Coach mark görünməsi üçün düymə gizlədilməməlidir
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            guard self.isViewLoaded, self.view.window != nil else {
+                print("SOS coach mark üçün view görünmür")
+                return
+            }
+
+            // HospitalMapController coachMarksController üçün delegate və dataSource təyin et
+            self.coachMarksController.dataSource = self
+            self.coachMarksController.delegate = self
+
+            // Əgər artıq işləyirsə, dayandır
+            self.coachMarksController.stop(immediately: true)
+
+            // Layout tam yüklənsin deyə əlavə et
+            self.view.layoutIfNeeded()
+
+            // SOS coach mark-u başlat
             self.coachMarksController.start(in: .window(over: self))
         }
     }
 
-    @objc func startSOSCoachMark() {
-        sosButton.isHidden = false
-        coachMarksController.start(in: .window(over: self))
-    }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func addHospitalAnnotations() {
         let existingHospitalAnnotations = mapView.annotations.filter { $0.title != "Ambulans" }
@@ -846,20 +855,13 @@ extension HospitalMapController: UITableViewDelegate, UITableViewDataSource {
     }
 
 }
-extension HospitalMapController: CoachMarksControllerDataSource {
+extension HospitalMapController: CoachMarksControllerDataSource,CoachMarksControllerDelegate {
     func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
         return 1
     }
     
     func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkAt index: Int) -> CoachMark {
-        guard let sosButton = self.view.subviews.first(where: { $0 is UIButton && $0 == self.sosButton }) as? UIButton else {
-            fatalError("SOS button could not be found.")
-        }
-        var coachMarkView: CoachMark?
-        if index == 0 {
-            coachMarkView = coachMarksController.helper.makeCoachMark(for: sosButton)
-        }
-        return coachMarkView ?? coachMarksController.helper.makeCoachMark()
+        return coachMarksController.helper.makeCoachMark(for: sosButton)
     }
 
     func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkViewsAt index: Int, madeFrom coachMark: CoachMark) -> (bodyView: (any UIView & CoachMarkBodyView), arrowView: (any UIView & CoachMarkArrowView)?) {

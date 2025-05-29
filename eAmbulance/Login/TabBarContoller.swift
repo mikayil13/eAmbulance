@@ -55,10 +55,19 @@ import Instructions
     }
 }
 extension TabBarContoller: CoachMarksControllerDataSource,CoachMarksControllerDelegate {
-func coachMarksController(_ coachMarksController: CoachMarksController, didFinishShowingAndWasSkipped skipped: Bool) {
-       NotificationCenter.default.post(name: Notification.Name("ShowSOSCoachMark"), object: nil)
+    func coachMarksController(_ coachMarksController: CoachMarksController, didFinishShowingAndWasSkipped skipped: Bool) {
         coachMarksController.stop(immediately: true)
-   }
+        
+        // 1. Tab-ı dəyiş
+        self.selectedIndex = 0
+        
+        // 2. Bildirişi yüngül gecikmə ilə göndər (0.6 saniyə kifayətdir)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            NotificationCenter.default.post(name: Notification.Name("ShowSOSCoachMark"), object: nil)
+        }
+    }
+
+
  
 func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
     return 4
@@ -94,4 +103,5 @@ func coachMarksController(_ coachMarksController: CoachMarksController,coachMark
     }
     return (bodyView: bodyView, arrowView: arrowView)
    }
+    
  }
