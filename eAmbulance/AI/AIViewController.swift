@@ -11,7 +11,7 @@ class AIViewController: UIViewController, UITextViewDelegate, AIViewModelDelegat
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(MessageCell.self, forCellReuseIdentifier: "MessageCell")
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(white: 0.97, alpha: 1)
+       tableView.backgroundColor = UIColor(white: 0.97, alpha: 1)
         return tableView
     }()
     
@@ -74,7 +74,7 @@ class AIViewController: UIViewController, UITextViewDelegate, AIViewModelDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Chat"
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(white: 0.97, alpha: 1)
         setupUI()
         viewModel.delegate = self
     }

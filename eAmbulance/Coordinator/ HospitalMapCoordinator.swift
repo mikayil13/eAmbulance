@@ -64,6 +64,7 @@ class HospitalMapCoordinator: Coordinator {
                     mapVC?.sosButton.isHidden = false
                     mapVC?.helpButton.isHidden = true
                     mapVC?.hospitalListContainer.isHidden = false
+                    mapVC?.tabBarController?.tabBar.isHidden = false
                     mapVC?.destinationButton.isHidden = false
                 }
             }

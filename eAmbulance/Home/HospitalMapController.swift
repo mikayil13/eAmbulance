@@ -704,8 +704,10 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     @objc func sosButtonTapped() {
         hospitalListContainer.isHidden = true
         destinationButton.isHidden = true
+        sosButton.isHidden = true
         tabBarController?.tabBar.isHidden = true
         tableView.isHidden = true
+        
         helpButton.isHidden = false
         print("SOS düyməsi basıldı")
         guard let userCoordinate = mapView.userLocation.location?.coordinate else { return }

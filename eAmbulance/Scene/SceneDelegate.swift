@@ -17,12 +17,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        let startVC = StartController()
-        let navController = UINavigationController(rootViewController: startVC)
-        window.rootViewController = navController
+
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") {
+            // Əgər artıq daxil olunubsa birbaşa əsas səhifəyə keç
+            window.rootViewController = TabBarContoller()
+        } else {
+            // Əks halda StartController göstər
+            let startVC = StartController()
+            let navController = UINavigationController(rootViewController: startVC)
+            window.rootViewController = navController
+        }
+
         self.window = window
         window.makeKeyAndVisible()
     }
+
 
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -167,6 +167,7 @@ class OtpVc: UIViewController {
                     // HospitalMapController-a keçid edin
                     let tabBarController = TabBarContoller()
                     tabBarController.modalPresentationStyle = .fullScreen
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     self?.present(tabBarController, animated: true)
                 }
             }
