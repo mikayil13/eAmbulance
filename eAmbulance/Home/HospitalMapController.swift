@@ -335,6 +335,12 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         setupLocationManager()
         addPanGesture()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(showSOSCoachMark),
+                name: Notification.Name("ShowSOSCoachMark"),
+                object: nil
+            )
         viewModel.onUpdate = { [weak self] progress, minutes in
             DispatchQueue.main.async {
                 self?.progressView.progress = progress
@@ -353,8 +359,10 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         authenticateUser()
-        NotificationCenter.default.addObserver(self, selector: #selector(showSOSCoachMark), name: Notification.Name("ShowSOSCoachMark"), object: nil)
-        showSOSCoachMark()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+               self.showSOSCoachMark()
+           }
+       
     }
     
     private func setupUI() {
@@ -524,32 +532,33 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         collapsePanels()
     }
     @objc func showSOSCoachMark() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        // Bir dəfəlik göstərmək üçün UserDefaults yoxlayır:
+        guard !UserDefaults.standard.bool(forKey: "didShowSOSCoachMark") else { return }
+
+        func tryToShow() {
+            // View pəncərəyə qoşulana qədər gözlə:
             guard self.isViewLoaded, self.view.window != nil else {
-                print("SOS coach mark üçün view görünmür")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    tryToShow()
+                }
                 return
             }
 
-            // HospitalMapController coachMarksController üçün delegate və dataSource təyin et
+            // CoachMarksController üçün dataSource və delegate təyinatı
             self.coachMarksController.dataSource = self
             self.coachMarksController.delegate = self
-
-            // Əgər artıq işləyirsə, dayandır
-            self.coachMarksController.stop(immediately: true)
-
-            // Layout tam yüklənsin deyə əlavə et
             self.view.layoutIfNeeded()
-
-            // SOS coach mark-u başlat
             self.coachMarksController.start(in: .window(over: self))
-        }
-    }
 
+            UserDefaults.standard.set(true, forKey: "didShowSOSCoachMark")
+        }
+
+        tryToShow()
+    }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
     func addHospitalAnnotations() {
         let existingHospitalAnnotations = mapView.annotations.filter { $0.title != "Ambulans" }
         mapView.removeAnnotations(existingHospitalAnnotations)
@@ -634,18 +643,12 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
     @objc func cancelButtonTapped() {
         showCancelAmbulanceAlert { [weak self] reason in
             guard let self = self else { return }
-
-            // 1. Spiner və mesaj görünür
             self.cancelCardView.isHidden = false
             self.spinner.startAnimating()
             self.spinner.isHidden = false
             self.titleLabel.isHidden = false
            self.subtitleLabel.isHidden = false
-
-
-            // 2. 1-2 saniyəlik süni gecikmə (spiner görünsün deyə)
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                // 3. Əməliyyatlar yerinə yetirilir
                 self.viewModel.animationTimer?.invalidate()
                 self.viewModel.animationTimer = nil
                 self.viewModel.resetAmbulanceAnimation()

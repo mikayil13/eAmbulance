@@ -18,7 +18,7 @@ final class AiManager {
             "Content-Type": "application/json"
         ]
         let parameters: [String: Any] = [
-            "inputs": "User: \(text)\nAssistant:",
+            "inputs": "Istifadəçi: \(text)\nAssistant:",
             "parameters": [
                 "temperature": 0.7,
                 "max_length": 300,
@@ -28,7 +28,6 @@ final class AiManager {
                 "wait_for_model": true
             ]
         ]
-
         return try await withCheckedThrowingContinuation { continuation in
             NetworkingManager.shared.postRequest(url: chatModelUrl, headers: headers, parameters: parameters) { result in
                 switch result {

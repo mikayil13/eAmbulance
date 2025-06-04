@@ -14,7 +14,6 @@ class FaceIDVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
     
 
@@ -40,7 +39,6 @@ class FaceIDVc: UIViewController {
           }
       }
       
-      // Authentifikasiya uğursuz olduqda istifadəçiyə xəbərdarlıq etmək
       func presentAuthFailureAlert() {
           let alert = UIAlertController(
               title: "Doğrulama alınmadı",
@@ -53,5 +51,4 @@ class FaceIDVc: UIViewController {
           })
           present(alert, animated: true)
       }
-  
 }

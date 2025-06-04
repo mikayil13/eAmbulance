@@ -158,6 +158,10 @@ class AIViewController: UIViewController, UITextViewDelegate, AIViewModelDelegat
             self.sendButton.isEnabled = false
         }
     }
+    func textViewDidChange(_ textView: UITextView) {
+        updatePlaceholderVisibility()
+    }
+
     
     func didFinishLoading() {
         DispatchQueue.main.async {
@@ -178,7 +182,6 @@ extension AIViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath) as! MessageCell
         let message = messages[indexPath.row]

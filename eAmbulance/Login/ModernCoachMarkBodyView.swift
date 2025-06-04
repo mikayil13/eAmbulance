@@ -45,7 +45,7 @@ class ModernCoachMarkBodyView: UIView, CoachMarkBodyView {
     private let stack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 16 // Daha çox aralıq
+        stack.spacing = 16 
         stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
