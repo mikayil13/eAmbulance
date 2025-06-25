@@ -45,9 +45,9 @@ import Instructions
     private func createNavController(viewController: UIViewController, title: String, image: String) -> UINavigationController {
         let nav = UINavigationController(rootViewController: viewController)
         nav.tabBarItem.title = title
-        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
+        let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
         nav.tabBarItem.image = UIImage(systemName: image, withConfiguration: configuration)
-        nav.tabBarItem.selectedImage = UIImage(systemName: image, withConfiguration: UIImage.SymbolConfiguration(pointSize: 22, weight: .bold))
+        nav.tabBarItem.selectedImage = UIImage(systemName: image, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .bold))
         nav.tabBarItem.imageInsets = UIEdgeInsets(top: -2, left: 0, bottom: 2, right: 0)
         nav.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 6)
         nav.isNavigationBarHidden = false
@@ -85,7 +85,6 @@ func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
 
 func coachMarksController(_ coachMarksController: CoachMarksController,coachMarkViewsAt index: Int,madeFrom coachMark: CoachMark
 ) -> (bodyView: (any UIView & CoachMarkBodyView), arrowView: (any UIView & CoachMarkArrowView)?) {
-    
     let bodyView = ModernCoachMarkBodyView()
     let arrowView = CoachMarkArrowDefaultView(orientation: coachMark.arrowOrientation!)
     

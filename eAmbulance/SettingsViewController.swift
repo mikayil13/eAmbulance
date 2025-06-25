@@ -1,73 +1,117 @@
 import UIKit
 
-class SettingsViewController: UITableViewController {
-    
-    private let sections = ["Hesab", "Bildirişlər", "Əlaqə"]
-    private let items = [
-        ["Hesab Detalları", "Şifrəni Dəyiş", "Çıxış Et"],
-        ["Bildirişləri Aktiv Et", "Səsli Bildirişlər", "Xəbərlər"],
-        ["Bizimlə Əlaqə", "Yardım Mərkəzi", "Əlaqə Forması"]
-    ]
-    
+class SettingsViewController: UIViewController {
+    private let sections = SettingsDataProvider.sections
+
+    private lazy var tableView: UITableView = {
+        let table = UITableView(frame: .zero, style: .insetGrouped)
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.dataSource = self
+        table.delegate = self
+        table.separatorStyle = .none
+        table.backgroundColor = .white
+        table.isScrollEnabled = false  // vacib — scroll olmasın
+        table.register(SettingsCell.self, forCellReuseIdentifier: "SettingsCell")
+        return table
+    }()
+
+    private lazy var logoutButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Çıxış et", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 20/255, green: 109/255, blue: 191/255, alpha: 1)
+        button.layer.cornerRadius = 10
+        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Ayarlar"
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        title = "Parametrlər"
+        view.backgroundColor = .white
+
+        setupUI()
     }
+
+    private func setupUI() {
+        view.addSubview(tableView)
+        view.addSubview(logoutButton)
+
+        // tableView hündürlüyünü hesabla: (hüceyrə sayı × hüceyrə hündürlüyü + section header hündürlükləri)
+
+        let rowHeight: CGFloat = 44 // Hüceyrənin standart hündürlüyü, əgər fərqli hündürlük varsa özün dəyiş
+        let sectionHeaderHeight: CGFloat = 50 // Təxmini header hündürlüyü, lazım olsa dəqiq ölçülə bilər
+
+        var totalRows = 0
+        for section in sections {
+            totalRows += section.items.count
+        }
+        let totalSections = sections.count
+
+        let tableHeight = CGFloat(totalRows) * rowHeight + CGFloat(totalSections) * sectionHeaderHeight
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.heightAnchor.constraint(equalToConstant: tableHeight),
+
+            logoutButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 20),
+            logoutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            logoutButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    @objc private func logoutButtonTapped() {
+        print("Çıxış et düyməsinə basıldı")
+    }
+}
+
+
+extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items[section].count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sections[section].items.count
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section]
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section].title
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = items[indexPath.section][indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let item = sections[indexPath.section].items[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath) as! SettingsCell
+        cell.configure(with: item)
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedItem = items[indexPath.section][indexPath.row]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        switch selectedItem {
-        case "Hesab Detalları":
-            // Hesab detallarını göstər
-            print("Hesab Detalları seçildi")
-        case "Şifrəni Dəyiş":
-            // Şifrəni dəyişmək üçün yönləndir
-            print("Şifrəni Dəyiş seçildi")
-        case "Çıxış Et":
-            // Çıxış etmək üçün yönləndir
-            print("Çıxış Et seçildi")
-        case "Bildirişləri Aktiv Et":
-            // Bildirişləri aktiv etmək
-            print("Bildirişlər Aktiv Et seçildi")
-        case "Səsli Bildirişlər":
-            // Səsli bildirişləri aktiv etmək
-            print("Səsli Bildirişlər seçildi")
-        case "Xəbərlər":
-            // Xəbərləri göstərmək
-            print("Xəbərlər seçildi")
-        case "Bizimlə Əlaqə":
-            // Əlaqə forması
-            print("Bizimlə Əlaqə seçildi")
-        case "Yardım Mərkəzi":
-            // Yardım mərkəzinə keçid
-            print("Yardım Mərkəzi seçildi")
-        case "Əlaqə Forması":
-            // Əlaqə forması
-            print("Əlaqə Forması seçildi")
+        let item = sections[indexPath.section].items[indexPath.row]
+        
+        switch item.title {
+        case "Şəxsi məlumatlarım":
+            let personalInfoVC = PersonalInfoViewController()
+            navigationController?.pushViewController(personalInfoVC, animated: true)
+        case "Yardım & Dəstək":
+            let helpSupportVC = HelpSupportViewController()
+            navigationController?.pushViewController(helpSupportVC, animated: true)
+            
+        case "Haqqımızda":
+            let aboutVC = AboutViewController()
+            navigationController?.pushViewController(aboutVC, animated: true)
+            
         default:
             break
         }
     }
 }
-
-
