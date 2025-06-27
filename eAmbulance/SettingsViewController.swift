@@ -1,4 +1,5 @@
 import UIKit
+import SafariServices
 
 class SettingsViewController: UIViewController {
     private let sections = SettingsDataProvider.sections
@@ -98,20 +99,28 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
         
         let item = sections[indexPath.section].items[indexPath.row]
         
+        print("Seçilmiş title:", item.title) // BURANI ƏLAVƏ ELƏ
+        
         switch item.title {
         case "Şəxsi məlumatlarım":
             let personalInfoVC = PersonalInfoViewController()
             navigationController?.pushViewController(personalInfoVC, animated: true)
+
+        case "Gizlilik & Şərtlər":
+            if let url = URL(string: "https://gist.githubusercontent.com/mikayil13/46eb8bca57f1c9a7a4d529a13e1ff9ca/raw") {
+                let safariVC = SFSafariViewController(url: url)
+                present(safariVC, animated: true)
+            }
         case "Yardım & Dəstək":
             let helpSupportVC = HelpSupportViewController()
             navigationController?.pushViewController(helpSupportVC, animated: true)
-            
+
         case "Haqqımızda":
             let aboutVC = AboutViewController()
             navigationController?.pushViewController(aboutVC, animated: true)
-            
         default:
             break
         }
     }
+
 }

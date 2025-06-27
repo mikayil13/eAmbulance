@@ -121,8 +121,11 @@ class PhoneNumberVc: UIViewController {
 
     @objc private func confirmButtonTapped() {
         guard let number = phoneTextField.text, !number.isEmpty else { return }
+        UserDefaults.standard.set(number, forKey: "userPhoneNumber")
+
         sendOTP(to: number)
     }
+
 
     private func sendOTP(to phoneNumber: String) {
         PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { [weak self] vid, error in

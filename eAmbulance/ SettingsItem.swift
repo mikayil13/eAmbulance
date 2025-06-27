@@ -22,7 +22,7 @@ struct SettingsDataProvider {
             SettingsItem(title: "Şəxsi məlumatlarım", hasSwitch: false),
             SettingsItem(title: "Smart saat", hasSwitch: true),
             SettingsItem(title: "Face ID", hasSwitch: true),
-            SettingsItem(title: "Gizlilik və Şərtlər", hasSwitch: false)
+            SettingsItem(title: "Gizlilik & Şərtlər", hasSwitch: false)
         ]),
         SettingsSection(title: "Daha çox", items: [
             SettingsItem(title: "Yardım & Dəstək", hasSwitch: false),
