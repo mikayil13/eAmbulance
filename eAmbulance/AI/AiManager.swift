@@ -9,7 +9,7 @@ final class AiManager {
     static let shared = AiManager()
     private init() {}
 
-    private let apiKey = "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"
+    private let apiKey = "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"
     private let chatModelUrl = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
 
     func sendMessage(_ text: String) async throws -> String {

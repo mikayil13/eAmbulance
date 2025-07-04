@@ -1,0 +1,23 @@
+  
+[
+  {
+    "question": "Ambulans çağırmaq üçün nə etməliyəm?",
+    "answer": "Tətbiqi açın və əsas ekrandakı “Ambulans çağır” düyməsinə toxunun. Tətbiq avtomatik olaraq yerinizi təyin edəcək və ən yaxın təcili yardım xidmətinə çağırış göndərəcək."
+  },
+  {
+    "question": "Ambulans neçə dəqiqəyə gələcək?",
+    "answer": "Ambulansın gəlmə müddəti yerləşdiyiniz əraziyə, yol vəziyyətinə və xidmətin yüklənməsinə görə dəyişə bilər. Orta hesabla 10-15 dəqiqə ərzində gəlməsi gözlənilir."
+  },
+  {
+    "question": "Ambulansı səhvən çağırmışamsa, nə etməliyəm?",
+    "answer": "Əgər səhvən çağırış etmisinizsə, dərhal Təcili Yardım Xidmətinə zəng edərək vəziyyəti izah edin və çağırışı ləğv etdiyinizi bildirin."
+  },
+  {
+    "question": "Nə üçün tətbiq GPS icazəsi istəyir?",
+    "answer": "Tətbiq sizin yerinizi avtomatik təyin edərək ən yaxın təcili yardım xidmətini çağırmaq üçün GPS məlumatına ehtiyac duyur."
+  },
+  {
+    "question": "Tətbiq işləmirsə, nə etməliyəm?",
+    "answer": "Tətbiqi bağlayıb yenidən açın. Əgər problem davam edirsə, cihazınızın internet bağlantısını yoxlayın və ya tətbiqi silib yenidən quraşdırın. Hələ də işləmirsə, dəstək emailinə müraciət edin."
+  }
+]

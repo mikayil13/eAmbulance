@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
   class  HelpSupportViewController: UIViewController {
       
           private let scrollView = UIScrollView()

@@ -623,22 +623,19 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
         }
         viewModel.ambulanceAnnotationView?.transform = .identity
     }
-    func showCancelAmbulanceAlert(onConfirm: @escaping (String?) -> Void) {
-           let alert = UIAlertController(
-               title: "Ambulansı ləğv etmək istəyirsiniz?",
-               message: "Əgər ləğv etmək istəyirsinizsə, səbəbini qeyd edin.",
-               preferredStyle: .alert
-           )
-           alert.addTextField { textField in
-               textField.placeholder = "Səbəbi buraya yazın..."
-           }
-           alert.addAction(UIAlertAction(title: "İmtina", style: .cancel, handler: nil))
-           alert.addAction(UIAlertAction(title: "Ləğv et", style: .destructive, handler: { _ in
-               let reason = alert.textFields?.first?.text
-               onConfirm(reason)
-           }))
-           present(alert, animated: true, completion: nil)
-       }
+    func showCancelAmbulanceAlert(completion: @escaping (String?) -> Void) {
+        let cancelVC = CancelBottomSheetController()
+        cancelVC.onReasonSelected = { reason in
+            completion(reason)
+        }
+        cancelVC.modalPresentationStyle = .pageSheet
+        if let sheet = cancelVC.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(cancelVC, animated: true)
+    }
+
 
     @objc func cancelButtonTapped() {
         showCancelAmbulanceAlert { [weak self] reason in
@@ -647,7 +644,8 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             self.spinner.startAnimating()
             self.spinner.isHidden = false
             self.titleLabel.isHidden = false
-           self.subtitleLabel.isHidden = false
+            self.subtitleLabel.isHidden = false
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 self.viewModel.animationTimer?.invalidate()
                 self.viewModel.animationTimer = nil
@@ -680,6 +678,7 @@ class HospitalMapController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+
     
     @objc func updateAmbulance() {
         guard let newCoord = viewModel.updateAmbulancePosition() else {

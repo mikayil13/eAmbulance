@@ -11,11 +11,10 @@ class SettingsViewController: UIViewController {
         table.delegate = self
         table.separatorStyle = .none
         table.backgroundColor = .white
-        table.isScrollEnabled = false  // vacib — scroll olmasın
+        table.isScrollEnabled = false
         table.register(SettingsCell.self, forCellReuseIdentifier: "SettingsCell")
         return table
     }()
-
     private lazy var logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Çıxış et", for: .normal)
@@ -27,23 +26,19 @@ class SettingsViewController: UIViewController {
         button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Parametrlər"
         view.backgroundColor = .white
-
         setupUI()
     }
 
     private func setupUI() {
         view.addSubview(tableView)
         view.addSubview(logoutButton)
-
-        // tableView hündürlüyünü hesabla: (hüceyrə sayı × hüceyrə hündürlüyü + section header hündürlükləri)
-
-        let rowHeight: CGFloat = 44 // Hüceyrənin standart hündürlüyü, əgər fərqli hündürlük varsa özün dəyiş
-        let sectionHeaderHeight: CGFloat = 50 // Təxmini header hündürlüyü, lazım olsa dəqiq ölçülə bilər
+        let rowHeight: CGFloat = 44
+        let sectionHeaderHeight: CGFloat = 50
 
         var totalRows = 0
         for section in sections {
@@ -93,19 +88,13 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
         cell.configure(with: item)
         return cell
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let item = sections[indexPath.section].items[indexPath.row]
-        
-        print("Seçilmiş title:", item.title) // BURANI ƏLAVƏ ELƏ
-        
         switch item.title {
         case "Şəxsi məlumatlarım":
             let personalInfoVC = PersonalInfoViewController()
             navigationController?.pushViewController(personalInfoVC, animated: true)
-
         case "Gizlilik & Şərtlər":
             if let url = URL(string: "https://gist.githubusercontent.com/mikayil13/46eb8bca57f1c9a7a4d529a13e1ff9ca/raw") {
                 let safariVC = SFSafariViewController(url: url)
@@ -114,7 +103,6 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
         case "Yardım & Dəstək":
             let helpSupportVC = HelpSupportViewController()
             navigationController?.pushViewController(helpSupportVC, animated: true)
-
         case "Haqqımızda":
             let aboutVC = AboutViewController()
             navigationController?.pushViewController(aboutVC, animated: true)
@@ -122,5 +110,4 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
             break
         }
     }
-
 }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		764570DB2DC153CD0071E084 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 764570DA2DC153CD0071E084 /* Alamofire */; };
 		764570DE2DC153E10071E084 /* Instructions in Frameworks */ = {isa = PBXBuildFile; productRef = 764570DD2DC153E10071E084 /* Instructions */; };
 		764570E12DC1543D0071E084 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E02DC1543D0071E084 /* FirebaseAnalytics */; };
 		764570E32DC1543D0071E084 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 764570E22DC1543D0071E084 /* FirebaseAuth */; };
@@ -17,6 +16,7 @@
 		764570EB2DC1543D0071E084 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 764570EA2DC1543D0071E084 /* FirebaseFunctions */; };
 		764570ED2DC1543D0071E084 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 764570EC2DC1543D0071E084 /* FirebaseMessaging */; };
 		764570EF2DC1543D0071E084 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 764570EE2DC1543D0071E084 /* FirebaseStorage */; };
+		76CEFAB72E15CC1600F4B792 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 76CEFAB62E15CC1600F4B792 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,10 +80,10 @@
 			files = (
 				764570ED2DC1543D0071E084 /* FirebaseMessaging in Frameworks */,
 				764570E72DC1543D0071E084 /* FirebaseDatabase in Frameworks */,
-				764570DB2DC153CD0071E084 /* Alamofire in Frameworks */,
 				764570EF2DC1543D0071E084 /* FirebaseStorage in Frameworks */,
 				764570E52DC1543D0071E084 /* FirebaseCore in Frameworks */,
 				764570EB2DC1543D0071E084 /* FirebaseFunctions in Frameworks */,
+				76CEFAB72E15CC1600F4B792 /* Alamofire in Frameworks */,
 				764570DE2DC153E10071E084 /* Instructions in Frameworks */,
 				764570E12DC1543D0071E084 /* FirebaseAnalytics in Frameworks */,
 				764570E32DC1543D0071E084 /* FirebaseAuth in Frameworks */,
@@ -148,7 +148,6 @@
 			);
 			name = eAmbulance;
 			packageProductDependencies = (
-				764570DA2DC153CD0071E084 /* Alamofire */,
 				764570DD2DC153E10071E084 /* Instructions */,
 				764570E02DC1543D0071E084 /* FirebaseAnalytics */,
 				764570E22DC1543D0071E084 /* FirebaseAuth */,
@@ -158,6 +157,7 @@
 				764570EA2DC1543D0071E084 /* FirebaseFunctions */,
 				764570EC2DC1543D0071E084 /* FirebaseMessaging */,
 				764570EE2DC1543D0071E084 /* FirebaseStorage */,
+				76CEFAB62E15CC1600F4B792 /* Alamofire */,
 			);
 			productName = eAmbulance;
 			productReference = 764570A32DC153380071E084 /* eAmbulance.app */;
@@ -242,9 +242,9 @@
 			mainGroup = 7645709A2DC153380071E084;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				764570D92DC153CD0071E084 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				764570DC2DC153E10071E084 /* XCRemoteSwiftPackageReference "Instructions" */,
 				764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				76CEFAB52E15CC1600F4B792 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 764570A42DC153380071E084 /* Products */;
@@ -601,14 +601,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		764570D92DC153CD0071E084 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
-			};
-		};
 		764570DC2DC153E10071E084 /* XCRemoteSwiftPackageReference "Instructions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ephread/Instructions";
@@ -625,14 +617,17 @@
 				minimumVersion = 11.12.0;
 			};
 		};
+		76CEFAB52E15CC1600F4B792 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		764570DA2DC153CD0071E084 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 764570D92DC153CD0071E084 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
 		764570DD2DC153E10071E084 /* Instructions */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 764570DC2DC153E10071E084 /* XCRemoteSwiftPackageReference "Instructions" */;
@@ -677,6 +672,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 764570DF2DC1543D0071E084 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		76CEFAB62E15CC1600F4B792 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76CEFAB52E15CC1600F4B792 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
